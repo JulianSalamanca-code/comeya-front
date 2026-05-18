@@ -60,7 +60,7 @@
               ],
               "outputHashing": "all",
               "serviceWorker": "ngsw-config.json",
-              "outputMode": "server"
+              "outputMode": "static"
             },
             "development": {
               "optimization": false,
