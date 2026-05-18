@@ -1,0 +1,46 @@
+<div class="login-bg">
+  <div class="login-overlay"></div>
+
+  <div class="login-card">
+    <div class="login-card__header">
+      <span class="login-card__icon">🍽</span>
+      <h1>ComeYa</h1>
+      <p>Cafetería Universitaria</p>
+    </div>
+
+    <div class="login-card__body">
+      <div class="form-group">
+        <label for="usuario">Usuario</label>
+        <input
+          id="usuario"
+          type="text"
+          [(ngModel)]="usuario"
+          placeholder="Tu usuario"
+          autocomplete="username"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="contrasena">Contraseña</label>
+        <input
+          id="contrasena"
+          type="password"
+          [(ngModel)]="contrasena"
+          placeholder="Tu contraseña"
+          autocomplete="current-password"
+          (keyup.enter)="iniciarSesion()"
+        />
+      </div>
+
+      <p class="login-error" *ngIf="error()">{{ error() }}</p>
+
+      <button
+        class="btn-ingresar"
+        (click)="iniciarSesion()"
+        [disabled]="cargando()"
+      >
+        {{ cargando() ? 'Ingresando...' : 'Ingresar' }}
+      </button>
+    </div>
+  </div>
+</div>

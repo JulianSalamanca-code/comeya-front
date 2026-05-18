@@ -1,0 +1,27 @@
+<nav class="navbar">
+  <a class="navbar__brand" routerLink="/dashboard">
+    <span class="navbar__logo">🍽</span>
+    <span class="navbar__name">ComeYa</span>
+  </a>
+
+  <button class="navbar__hamburger" (click)="toggleMenu()" [class.open]="menuAbierto()">
+    <span></span><span></span><span></span>
+  </button>
+
+  <ul class="navbar__links" [class.open]="menuAbierto()">
+    <li>
+      <a routerLink="/dashboard" routerLinkActive="active" (click)="cerrarMenu()">Dashboard</a>
+    </li>
+    <li>
+      <a routerLink="/menu" routerLinkActive="active" (click)="cerrarMenu()">Menú del día</a>
+    </li>
+    <li>
+      <a routerLink="/eventos" routerLinkActive="active" (click)="cerrarMenu()">Eventos</a>
+    </li>
+    <li>
+      <a routerLink="/admin" routerLinkActive="active" (click)="cerrarMenu()">Administración</a>
+    </li>
+  </ul>
+
+  <div class="navbar__avatar" routerLink="/perfil">JD</div>
+</nav>

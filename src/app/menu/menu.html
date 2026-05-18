@@ -1,0 +1,30 @@
+<div class="menu-page">
+  <div class="menu-header">
+    <h1>Menú del día</h1>
+    <p>Lo que hay hoy en tu cafetería</p>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <button
+      *ngFor="let cat of categorias"
+      class="tab"
+      [class.active]="categoriaActiva() === cat"
+      (click)="setCategoria(cat)"
+    >
+      {{ cat }}
+    </button>
+  </div>
+
+  <!-- Grid de platos -->
+  <div class="platos-grid">
+    <div class="plato" *ngFor="let plato of platosFiltrados">
+      <div class="plato__emoji">{{ plato.emoji }}</div>
+      <div class="plato__info">
+        <strong>{{ plato.nombre }}</strong>
+        <p>{{ plato.desc }}</p>
+      </div>
+      <span class="plato__precio">{{ formatPrecio(plato.precio) }}</span>
+    </div>
+  </div>
+</div>

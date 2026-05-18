@@ -1,0 +1,31 @@
+:root {
+  --brand: #C84B0F;
+  --brand-dark: #a33d0a;
+  --green: #1D9E75;
+  --bg: #f5f0eb;
+  --card: #ffffff;
+  --border: #e0d8d0;
+  --text: #2c1a0e;
+  --text-muted: #7a6a5a;
+  --navbar-h: 64px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--bg);
+  font-family: 'Georgia', serif;
+  color: var(--text);
+}
+
+main {
+  min-height: 100vh;
+
+  &.with-nav {
+    padding-top: var(--navbar-h);
+  }
+}

@@ -1,0 +1,54 @@
+<div class="admin-page">
+  <div class="admin-header">
+    <h1>Administración</h1>
+    <p>Gestión de usuarios del sistema</p>
+  </div>
+
+  <div class="admin-card">
+    <div class="admin-card__toolbar">
+      <span class="admin-card__total">{{ usuarios().length }} usuarios registrados</span>
+    </div>
+
+    <div class="table-wrapper">
+      <div class="loading" *ngIf="cargando()">Cargando usuarios...</div>
+
+      <table *ngIf="!cargando()">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Nombre</th>
+            <th>Email</th>
+            <th>Rol</th>
+            <th>Estado</th>
+            <th>Acción</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let u of usuarios()">
+            <td class="td-id">{{ u.id }}</td>
+            <td class="td-nombre">{{ u.nombre }}</td>
+            <td class="td-email">{{ u.email }}</td>
+            <td>
+              <span class="badge badge--rol">{{ u.rol }}</span>
+            </td>
+            <td>
+              <span class="badge" [class.badge--activo]="u.activo" [class.badge--inactivo]="!u.activo">
+                {{ u.activo ? 'Activo' : 'Inactivo' }}
+              </span>
+            </td>
+            <td>
+              <button
+                class="btn-toggle"
+                [class.desactivar]="u.activo"
+                [class.activar]="!u.activo"
+                (click)="toggleEstado(u)"
+              >
+                {{ u.activo ? 'Desactivar' : 'Activar' }}
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

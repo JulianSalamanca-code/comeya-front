@@ -1,0 +1,143 @@
+.admin-page {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 32px 24px 48px;
+}
+
+.admin-header {
+  margin-bottom: 28px;
+
+  h1 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--brand);
+    margin-bottom: 4px;
+  }
+
+  p {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+  }
+}
+
+.admin-card {
+  background: var(--card);
+  border-radius: 18px;
+  border: 1.5px solid var(--border);
+  overflow: hidden;
+
+  &__toolbar {
+    padding: 16px 24px;
+    border-bottom: 1.5px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__total {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+}
+
+.loading {
+  padding: 40px;
+  text-align: center;
+  color: var(--text-muted);
+}
+
+.table-wrapper {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+
+  thead tr {
+    background: var(--bg);
+  }
+
+  th {
+    padding: 12px 16px;
+    text-align: left;
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-muted);
+    white-space: nowrap;
+  }
+
+  tbody tr {
+    border-top: 1px solid var(--border);
+    transition: background 0.15s;
+
+    &:hover {
+      background: #fdf8f5;
+    }
+  }
+
+  td {
+    padding: 14px 16px;
+    font-size: 0.92rem;
+    vertical-align: middle;
+  }
+}
+
+.td-id    { color: var(--text-muted); font-weight: 600; width: 48px; }
+.td-nombre { font-weight: 600; }
+.td-email  { color: var(--text-muted); font-size: 0.87rem; }
+
+/* Badges */
+.badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 50px;
+  font-size: 0.78rem;
+  font-weight: 700;
+
+  &--activo   { background: #e8f5e9; color: #2e7d32; }
+  &--inactivo { background: #fce4ec; color: #c62828; }
+  &--rol      { background: #e3f2fd; color: #1565c0; }
+}
+
+/* Botón toggle */
+.btn-toggle {
+  padding: 6px 14px;
+  border-radius: 8px;
+  border: 1.5px solid;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &.desactivar {
+    border-color: #e57373;
+    color: #c62828;
+    background: transparent;
+
+    &:hover {
+      background: #c62828;
+      color: #fff;
+    }
+  }
+
+  &.activar {
+    border-color: #81c784;
+    color: #2e7d32;
+    background: transparent;
+
+    &:hover {
+      background: #2e7d32;
+      color: #fff;
+    }
+  }
+}
+
+@media (max-width: 600px) {
+  .admin-page { padding: 24px 16px 40px; }
+  .admin-header h1 { font-size: 1.4rem; }
+  .td-email { display: none; }
+}

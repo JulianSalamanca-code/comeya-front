@@ -1,0 +1,21 @@
+<div class="eventos-page">
+  <div class="eventos-header">
+    <h1>Eventos y Promociones</h1>
+    <p>Novedades y ofertas especiales de tu cafetería</p>
+  </div>
+
+  <div class="eventos-grid">
+    <div class="evento-card" *ngFor="let e of eventos()">
+      <div class="evento-card__top">
+        <span class="evento-card__emoji">{{ e.emoji }}</span>
+        <span class="evento-card__tipo" [attr.data-tipo]="e.tipo">{{ e.tipo }}</span>
+      </div>
+      <h3 class="evento-card__titulo">{{ e.titulo }}</h3>
+      <p class="evento-card__desc">{{ e.descripcion }}</p>
+      <div class="evento-card__footer">
+        <span class="evento-card__fecha">📅 {{ e.fecha }}</span>
+        <button class="evento-card__btn">Ver más</button>
+      </div>
+    </div>
+  </div>
+</div>

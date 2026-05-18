@@ -1,0 +1,41 @@
+<div class="dashboard">
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero__content">
+      <p class="hero__saludo">¡Bienvenido de nuevo! 👋</p>
+      <h1 class="hero__titulo">¿Qué vamos a comer hoy?</h1>
+      <p class="hero__sub">Cafetería Universitaria · ComeYa</p>
+    </div>
+    <div class="hero__deco">🍽</div>
+  </section>
+
+  <!-- Acceso rápido -->
+  <section class="seccion">
+    <h2 class="seccion__titulo">Acceso rápido</h2>
+    <div class="cards-grid">
+      <a
+        *ngFor="let item of accesos"
+        [routerLink]="item.ruta"
+        class="card"
+      >
+        <span class="card__icon">{{ item.icon }}</span>
+        <strong class="card__label">{{ item.label }}</strong>
+        <p class="card__desc">{{ item.desc }}</p>
+      </a>
+    </div>
+  </section>
+
+  <!-- Eventos recientes -->
+  <section class="seccion">
+    <h2 class="seccion__titulo">Novedades recientes</h2>
+    <div class="eventos-lista">
+      <div class="evento" *ngFor="let e of eventosRecientes()">
+        <span class="evento__fecha">{{ e.fecha }}</span>
+        <div class="evento__info">
+          <strong>{{ e.titulo }}</strong>
+          <p>{{ e.desc }}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

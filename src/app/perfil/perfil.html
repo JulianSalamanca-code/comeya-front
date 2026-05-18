@@ -1,0 +1,61 @@
+<div class="perfil-page">
+  <div class="perfil-header">
+    <h1>Mi perfil</h1>
+    <p>Información de tu cuenta universitaria</p>
+  </div>
+
+  <div class="perfil-card">
+    <!-- Avatar -->
+    <div class="perfil-avatar">
+      <div class="perfil-avatar__circulo">{{ iniciales }}</div>
+      <div class="perfil-avatar__info">
+        <strong>{{ perfil.nombre }}</strong>
+        <span>{{ perfil.programa }}</span>
+      </div>
+    </div>
+
+    <!-- Formulario -->
+    <div class="perfil-form">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Nombre completo</label>
+          <input type="text" [(ngModel)]="perfil.nombre" [disabled]="!editando()" />
+        </div>
+        <div class="form-group">
+          <label>Correo electrónico</label>
+          <input type="email" [(ngModel)]="perfil.email" [disabled]="!editando()" />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Teléfono</label>
+          <input type="tel" [(ngModel)]="perfil.telefono" [disabled]="!editando()" />
+        </div>
+        <div class="form-group">
+          <label>Semestre</label>
+          <input type="text" [(ngModel)]="perfil.semestre" [disabled]="!editando()" />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Programa académico</label>
+        <input type="text" [(ngModel)]="perfil.programa" [disabled]="!editando()" />
+      </div>
+    </div>
+
+    <!-- Acciones -->
+    <div class="perfil-actions">
+      <p class="guardado-msg" *ngIf="guardado()">✅ Cambios guardados correctamente</p>
+
+      <div class="btns" *ngIf="!editando()">
+        <button class="btn btn--primary" (click)="editar()">✏️ Editar perfil</button>
+      </div>
+
+      <div class="btns" *ngIf="editando()">
+        <button class="btn btn--primary" (click)="guardar()">💾 Guardar cambios</button>
+        <button class="btn btn--secondary" (click)="cancelar()">Cancelar</button>
+      </div>
+    </div>
+  </div>
+</div>
