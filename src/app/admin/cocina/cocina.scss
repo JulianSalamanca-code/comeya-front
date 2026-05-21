@@ -1,0 +1,139 @@
+.cocina-layout {
+  min-height: 100vh;
+  background: #0f1117;
+  color: #f0f0f0;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.cocina-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 24px;
+  background: #1a1d27;
+  border-bottom: 1px solid #2a2d3a;
+
+  &__icon { font-size: 28px; }
+
+  h1 {
+    flex: 1;
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0;
+  }
+}
+
+.btn-logout {
+  background: transparent;
+  border: 1px solid #444;
+  color: #aaa;
+  padding: 6px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  &:hover { border-color: #e05; color: #e05; }
+}
+
+.cocina-loading {
+  text-align: center;
+  padding: 60px;
+  color: #888;
+}
+
+.cocina-columns {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  padding: 20px;
+}
+
+.cocina-col {
+  background: #1a1d27;
+  border-radius: 12px;
+  padding: 16px;
+  min-height: 400px;
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 600;
+    font-size: 15px;
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #2a2d3a;
+  }
+
+  &--pendiente    .cocina-col__header { color: #ff6b6b; }
+  &--preparacion  .cocina-col__header { color: #ffd93d; }
+  &--listo        .cocina-col__header { color: #6bcb77; }
+}
+
+.badge {
+  background: #2a2d3a;
+  border-radius: 20px;
+  padding: 2px 10px;
+  font-size: 13px;
+  color: #ccc;
+}
+
+.pedido-card {
+  background: #22263a;
+  border-radius: 10px;
+  padding: 14px;
+  margin-bottom: 12px;
+  border: 1px solid #2e3248;
+
+  &--listo { opacity: 0.6; }
+
+  &__top {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 6px;
+  }
+}
+
+.pedido-id    { font-weight: 700; color: #7c83ff; font-size: 14px; }
+.pedido-hora  { font-size: 12px; color: #888; }
+.pedido-usuario { font-size: 13px; color: #bbb; margin: 0 0 8px; }
+
+.pedido-items {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 12px;
+
+  li {
+    font-size: 13px;
+    padding: 3px 0;
+    border-bottom: 1px solid #2e3248;
+    &:last-child { border-bottom: none; }
+    &::before { content: '• '; color: #7c83ff; }
+  }
+}
+
+.btn-avanzar {
+  width: 100%;
+  padding: 8px;
+  border: none;
+  border-radius: 7px;
+  background: #ff6b6b22;
+  color: #ff6b6b;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .2s;
+
+  &:hover { background: #ff6b6b44; }
+
+  &--listo {
+    background: #6bcb7722;
+    color: #6bcb77;
+    &:hover { background: #6bcb7744; }
+  }
+}
+
+.cocina-empty {
+  text-align: center;
+  color: #555;
+  font-size: 13px;
+  padding: 20px 0;
+}

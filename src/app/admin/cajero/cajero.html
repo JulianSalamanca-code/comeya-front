@@ -1,0 +1,74 @@
+<div class="cajero-layout">
+
+  <header class="cajero-header">
+    <span>🧾</span>
+    <h1>Dashboard Cajero</h1>
+    <div class="cajero-header__total">
+      Total hoy: <strong>{{ formatPrecio(totalCobradoHoy()) }}</strong>
+    </div>
+    <button class="btn-logout" (click)="logout()">Salir</button>
+  </header>
+
+  @if (cargando()) {
+    <p class="cajero-loading">Cargando pedidos...</p>
+  } @else {
+
+    <div class="cajero-content">
+
+      <!-- POR COBRAR -->
+      <section class="cajero-section">
+        <h2>🟡 Por cobrar <span class="badge">{{ porCobrar.length }}</span></h2>
+
+        @for (pedido of porCobrar; track pedido.id) {
+          <div class="pedido-card">
+            <div class="pedido-card__info">
+              <div class="pedido-card__top">
+                <span class="pedido-id">#{{ pedido.id }}</span>
+                <span class="pedido-usuario">{{ pedido.usuario }}</span>
+                <span class="pedido-hora">{{ pedido.hora }}</span>
+              </div>
+              <ul class="pedido-items">
+                @for (item of pedido.items; track item) {
+                  <li>{{ item }}</li>
+                }
+              </ul>
+            </div>
+            <div class="pedido-card__cobro">
+              <span class="pedido-total">{{ formatPrecio(pedido.total) }}</span>
+              <button class="btn-cobrar" (click)="cobrar(pedido)">
+                Cobrar ✓
+              </button>
+            </div>
+          </div>
+        }
+
+        @if (porCobrar.length === 0) {
+          <p class="cajero-empty">Sin pedidos por cobrar</p>
+        }
+      </section>
+
+      <!-- COBRADOS -->
+      <section class="cajero-section cajero-section--cobrados">
+        <h2>🟢 Cobrados hoy <span class="badge">{{ cobrados.length }}</span></h2>
+
+        @for (pedido of cobrados; track pedido.id) {
+          <div class="pedido-card pedido-card--cobrado">
+            <div class="pedido-card__info">
+              <div class="pedido-card__top">
+                <span class="pedido-id">#{{ pedido.id }}</span>
+                <span class="pedido-usuario">{{ pedido.usuario }}</span>
+                <span class="pedido-hora">{{ pedido.hora }}</span>
+              </div>
+            </div>
+            <span class="pedido-total pedido-total--cobrado">{{ formatPrecio(pedido.total) }}</span>
+          </div>
+        }
+
+        @if (cobrados.length === 0) {
+          <p class="cajero-empty">Ningún cobro aún</p>
+        }
+      </section>
+
+    </div>
+  }
+</div>

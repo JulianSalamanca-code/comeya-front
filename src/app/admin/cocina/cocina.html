@@ -1,0 +1,98 @@
+<div class="cocina-layout">
+
+  <header class="cocina-header">
+    <span class="cocina-header__icon">👨‍🍳</span>
+    <h1>Dashboard Cocina</h1>
+    <button class="btn-logout" (click)="logout()">Salir</button>
+  </header>
+
+  @if (cargando()) {
+    <p class="cocina-loading">Cargando pedidos...</p>
+  } @else {
+
+    <div class="cocina-columns">
+
+      <!-- PENDIENTES -->
+      <div class="cocina-col cocina-col--pendiente">
+        <div class="cocina-col__header">
+          <span>🔴 Pendientes</span>
+          <span class="badge">{{ pendientes.length }}</span>
+        </div>
+        @for (pedido of pendientes; track pedido.id) {
+          <div class="pedido-card">
+            <div class="pedido-card__top">
+              <span class="pedido-id">#{{ pedido.id }}</span>
+              <span class="pedido-hora">{{ pedido.hora }}</span>
+            </div>
+            <p class="pedido-usuario">{{ pedido.usuario }}</p>
+            <ul class="pedido-items">
+              @for (item of pedido.items; track item) {
+                <li>{{ item }}</li>
+              }
+            </ul>
+            <button class="btn-avanzar" (click)="avanzarEstado(pedido)">
+              Iniciar preparación →
+            </button>
+          </div>
+        }
+        @if (pendientes.length === 0) {
+          <p class="cocina-empty">Sin pedidos pendientes</p>
+        }
+      </div>
+
+      <!-- EN PREPARACIÓN -->
+      <div class="cocina-col cocina-col--preparacion">
+        <div class="cocina-col__header">
+          <span>🟡 En preparación</span>
+          <span class="badge">{{ enPreparacion.length }}</span>
+        </div>
+        @for (pedido of enPreparacion; track pedido.id) {
+          <div class="pedido-card">
+            <div class="pedido-card__top">
+              <span class="pedido-id">#{{ pedido.id }}</span>
+              <span class="pedido-hora">{{ pedido.hora }}</span>
+            </div>
+            <p class="pedido-usuario">{{ pedido.usuario }}</p>
+            <ul class="pedido-items">
+              @for (item of pedido.items; track item) {
+                <li>{{ item }}</li>
+              }
+            </ul>
+            <button class="btn-avanzar btn-avanzar--listo" (click)="avanzarEstado(pedido)">
+              Marcar como listo ✓
+            </button>
+          </div>
+        }
+        @if (enPreparacion.length === 0) {
+          <p class="cocina-empty">Nada en preparación</p>
+        }
+      </div>
+
+      <!-- LISTOS -->
+      <div class="cocina-col cocina-col--listo">
+        <div class="cocina-col__header">
+          <span>🟢 Listos</span>
+          <span class="badge">{{ listos.length }}</span>
+        </div>
+        @for (pedido of listos; track pedido.id) {
+          <div class="pedido-card pedido-card--listo">
+            <div class="pedido-card__top">
+              <span class="pedido-id">#{{ pedido.id }}</span>
+              <span class="pedido-hora">{{ pedido.hora }}</span>
+            </div>
+            <p class="pedido-usuario">{{ pedido.usuario }}</p>
+            <ul class="pedido-items">
+              @for (item of pedido.items; track item) {
+                <li>{{ item }}</li>
+              }
+            </ul>
+          </div>
+        }
+        @if (listos.length === 0) {
+          <p class="cocina-empty">Ninguno listo aún</p>
+        }
+      </div>
+
+    </div>
+  }
+</div>

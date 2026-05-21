@@ -11,33 +11,47 @@ import { ApiService } from '../services/api';
   styleUrl: './login.scss'
 })
 export class LoginComponent {
-  private api = inject(ApiService);
+  private api    = inject(ApiService);
   private router = inject(Router);
 
   tabActivo: 'login' | 'registro' = 'login';
 
   // Login
-  usuario = '';
+  usuario    = '';
   contrasena = '';
-  cargando = signal(false);
-  error = signal('');
+  cargando   = signal(false);
+  error      = signal('');
 
   // Registro
-  regNombre = '';
-  regEmail = '';
-  regUsuario = '';
+  regNombre     = '';
+  regEmail      = '';
+  regUsuario    = '';
   regContrasena = '';
-  regSemestre = '';
-  errorReg = signal('');
-  exitoReg = signal('');
+  regSemestre   = '';   // ← estaba faltando
+  errorReg      = signal('');
+  exitoReg      = signal('');
 
   iniciarSesion() {
     if (!this.usuario || !this.contrasena) {
       this.error.set('Por favor completa todos los campos.');
       return;
     }
-    // Bypass temporal — reemplazar con this.api.login() cuando el backend esté listo
-    this.router.navigate(['/dashboard']);
+    this.error.set('');
+    this.cargando.set(true);
+
+    this.api.login(this.usuario, this.contrasena).subscribe({
+      next: (res) => {
+        this.cargando.set(false);
+        if (res.rol === 'STAFF_COCINA')      this.router.navigate(['/cocina']);
+        else if (res.rol === 'STAFF_CAJERO') this.router.navigate(['/cajero']);
+        else if (res.rol === 'ADMIN')        this.router.navigate(['/admin']);
+        else                                 this.router.navigate(['/dashboard']);
+      },
+      error: () => {
+        this.cargando.set(false);
+        this.error.set('Usuario o contraseña incorrectos.');
+      }
+    });
   }
 
   registrar() {
@@ -52,14 +66,24 @@ export class LoginComponent {
     this.errorReg.set('');
     this.cargando.set(true);
 
-    // Simulación — conectar con backend cuando esté listo
-    setTimeout(() => {
-      this.cargando.set(false);
-      this.exitoReg.set('¡Cuenta creada! Ya puedes iniciar sesión.');
-      setTimeout(() => {
-        this.tabActivo = 'login';
-        this.exitoReg.set('');
-      }, 2000);
-    }, 1000);
+    this.api.register({
+      nombreCompleto: this.regNombre,
+      username:       this.regUsuario,
+      email:          this.regEmail,
+      password:       this.regContrasena
+    }).subscribe({
+      next: () => {
+        this.cargando.set(false);
+        this.exitoReg.set('¡Cuenta creada! Ya puedes iniciar sesión.');
+        setTimeout(() => {
+          this.tabActivo = 'login';
+          this.exitoReg.set('');
+        }, 2000);
+      },
+      error: () => {
+        this.cargando.set(false);
+        this.errorReg.set('Error al registrar. El usuario o email ya existe.');
+      }
+    });
   }
 }
