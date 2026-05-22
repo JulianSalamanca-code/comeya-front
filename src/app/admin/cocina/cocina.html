@@ -21,7 +21,6 @@
         @for (pedido of pendientes; track pedido.id) {
           <div class="pedido-card">
             <div class="pedido-card__top">
-              <span class="pedido-id">#{{ pedido.id }}</span>
               <span class="pedido-hora">{{ pedido.hora }}</span>
             </div>
             <p class="pedido-usuario">{{ pedido.usuario }}</p>
@@ -49,7 +48,6 @@
         @for (pedido of enPreparacion; track pedido.id) {
           <div class="pedido-card">
             <div class="pedido-card__top">
-              <span class="pedido-id">#{{ pedido.id }}</span>
               <span class="pedido-hora">{{ pedido.hora }}</span>
             </div>
             <p class="pedido-usuario">{{ pedido.usuario }}</p>
@@ -77,7 +75,6 @@
         @for (pedido of listos; track pedido.id) {
           <div class="pedido-card pedido-card--listo">
             <div class="pedido-card__top">
-              <span class="pedido-id">#{{ pedido.id }}</span>
               <span class="pedido-hora">{{ pedido.hora }}</span>
             </div>
             <p class="pedido-usuario">{{ pedido.usuario }}</p>

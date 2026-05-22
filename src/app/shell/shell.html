@@ -1,0 +1,38 @@
+<nav class="top-nav">
+  <div class="app-container top-nav__inner">
+    <div class="nav-left">
+      <span class="nav-logo">🍽️</span>
+      <div class="nav-brand">Cafetería<span>Universitaria</span></div>
+    </div>
+    <div class="nav-right">
+      <button class="nav-btn" routerLink="/eventos">Eventos</button>
+      <button class="nav-btn" routerLink="/carrito">
+        <span class="cart-badge">🛒 <span class="badge-count" id="badge">0</span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<main>
+  <router-outlet></router-outlet>
+</main>
+
+<nav class="bottom-nav">
+  <div class="app-container bottom-nav__inner">
+    <button class="nav-item" routerLink="/home" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
+      <span class="nav-icon">🏠</span>Inicio
+    </button>
+    <button class="nav-item" routerLink="/menu" routerLinkActive="active">
+      <span class="nav-icon">🍽️</span>Menú
+    </button>
+    <button class="nav-item" routerLink="/carrito" routerLinkActive="active">
+      <span class="nav-icon">🛒</span>Carrito
+    </button>
+    <button class="nav-item" routerLink="/pedidos" routerLinkActive="active">
+      <span class="nav-icon">📋</span>Pedidos
+    </button>
+    <button class="nav-item" routerLink="/perfil" routerLinkActive="active">
+      <span class="nav-icon">👤</span>Perfil
+    </button>
+  </div>
+</nav>

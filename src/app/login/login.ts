@@ -11,25 +11,24 @@ import { ApiService } from '../services/api';
   styleUrl: './login.scss'
 })
 export class LoginComponent {
-  private api    = inject(ApiService);
+  private api = inject(ApiService);
   private router = inject(Router);
 
   tabActivo: 'login' | 'registro' = 'login';
 
   // Login
-  usuario    = '';
+  usuario = '';
   contrasena = '';
-  cargando   = signal(false);
-  error      = signal('');
+  cargando = signal(false);
+  error = signal('');
 
   // Registro
-  regNombre     = '';
-  regEmail      = '';
-  regUsuario    = '';
+  regNombre = '';
+  regEmail = '';
+  regUsuario = '';
   regContrasena = '';
-  regSemestre   = '';   // ← estaba faltando
-  errorReg      = signal('');
-  exitoReg      = signal('');
+  errorReg = signal('');
+  exitoReg = signal('');
 
   iniciarSesion() {
     if (!this.usuario || !this.contrasena) {
@@ -42,10 +41,10 @@ export class LoginComponent {
     this.api.login(this.usuario, this.contrasena).subscribe({
       next: (res) => {
         this.cargando.set(false);
-        if (res.rol === 'STAFF_COCINA')      this.router.navigate(['/cocina']);
-        else if (res.rol === 'STAFF_CAJERO') this.router.navigate(['/cajero']);
-        else if (res.rol === 'ADMIN')        this.router.navigate(['/admin']);
-        else                                 this.router.navigate(['/dashboard']);
+        const target = res.rol === 'STAFF_COCINA' ? '/cocina'
+          : res.rol === 'STAFF_CAJERO' ? '/cajero'
+          : '/home';
+        this.router.navigate([target]);
       },
       error: () => {
         this.cargando.set(false);
@@ -67,10 +66,10 @@ export class LoginComponent {
     this.cargando.set(true);
 
     this.api.register({
-      nombreCompleto: this.regNombre,
-      username:       this.regUsuario,
-      email:          this.regEmail,
-      password:       this.regContrasena
+      fullName: this.regNombre,
+      username: this.regUsuario,
+      email: this.regEmail,
+      password: this.regContrasena
     }).subscribe({
       next: () => {
         this.cargando.set(false);

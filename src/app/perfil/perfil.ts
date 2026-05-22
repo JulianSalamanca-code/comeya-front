@@ -1,47 +1,35 @@
-import { Component, signal } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
+import { ApiService } from '../services/api';
 
 @Component({
   selector: 'app-perfil',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './perfil.html',
   styleUrl: './perfil.scss'
 })
-export class PerfilComponent {
-  editando = signal(false);
-  guardado = signal(false);
+export class PerfilComponent implements OnInit {
+  api = inject(ApiService);
+  perfil: any = {};
 
-  perfil = {
-    nombre: 'Juan Díaz',
-    email: 'juan.diaz@uni.edu.co',
-    telefono: '300 123 4567',
-    programa: 'Ingeniería de Sistemas',
-    semestre: '6'
-  };
+  ngOnInit() {
+    const username = this.api.getUsername() ?? 'Usuario';
+    const email = ''; // TODO: load from getMe
+    this.perfil = { nombre: username, email };
 
-  get iniciales(): string {
-    return this.perfil.nombre
-      .split(' ')
-      .slice(0, 2)
-      .map(n => n[0])
-      .join('')
-      .toUpperCase();
+    if (typeof window !== 'undefined') {
+      this.api.getMe().subscribe({
+        next: (res: any) => {
+          this.perfil = res;
+        },
+        error: () => {}
+      });
+    }
   }
 
-  editar() {
-    this.editando.set(true);
-    this.guardado.set(false);
-  }
-
-  guardar() {
-    this.editando.set(false);
-    this.guardado.set(true);
-    setTimeout(() => this.guardado.set(false), 3000);
-  }
-
-  cancelar() {
-    this.editando.set(false);
+  logout() {
+    this.api.logout();
   }
 }

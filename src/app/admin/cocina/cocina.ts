@@ -19,11 +19,17 @@ interface Pedido {
 })
 export class CocinaComponent implements OnInit {
   private api = inject(ApiService);
+  private isBrowser = typeof window !== 'undefined';
 
   pedidos = signal<Pedido[]>([]);
   cargando = signal(true);
 
   ngOnInit() {
+    if (!this.isBrowser) {
+      this.cargando.set(false);
+      return;
+    }
+
     this.api.getPedidos().subscribe({
       next: (data: any) => {
         this.pedidos.set(data);

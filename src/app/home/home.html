@@ -1,0 +1,37 @@
+<div class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content app-container">
+    <p class="hero-greeting">Bienvenido/a {{ username }} 👋</p>
+    <h1 class="hero-title">¡Bienvenidos a la<br>Cafetería<br><em>Universitaria!</em></h1>
+    <div class="hero-btns">
+      <button class="btn-hero" routerLink="/menu">
+        <span>Menú del Día</span><span class="arrow">›</span>
+      </button>
+      <button class="btn-hero" routerLink="/menu" style="background:rgba(200,84,26,0.7);">
+        <span>Café &amp; Bebidas</span><span class="arrow">›</span>
+      </button>
+      <button class="btn-hero" routerLink="/menu" style="background:rgba(200,84,26,0.5);">
+        <span>Snacks y Paninis</span><span class="arrow">›</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="section app-container">
+  <div class="section-header">
+    <span class="section-title">Eventos y Promociones</span>
+    <div class="section-divider"></div>
+  </div>
+  <div class="eventos-row">
+    @for (ev of eventos; track ev.label) {
+      <div class="evento-card" routerLink="/eventos">
+        <img [src]="ev.img" [alt]="ev.label" loading="lazy">
+        <div class="evento-card-overlay"><span class="evento-label">{{ ev.label }}</span></div>
+      </div>
+    }
+  </div>
+  <button class="btn-mas-info" routerLink="/eventos">Más Información</button>
+</div>
+
+<div class="page-spacer"></div>

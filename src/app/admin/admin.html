@@ -1,54 +1,213 @@
 <div class="admin-page">
-  <div class="admin-header">
-    <h1>Administración</h1>
-    <p>Gestión de usuarios del sistema</p>
-  </div>
 
-  <div class="admin-card">
-    <div class="admin-card__toolbar">
-      <span class="admin-card__total">{{ usuarios().length }} usuarios registrados</span>
+  <header class="admin-header">
+    <div>
+      <h1>Panel de Administración</h1>
+      <p>Gestión completa del sistema</p>
     </div>
+    <button class="btn-logout" (click)="logout()">Salir</button>
+  </header>
 
-    <div class="table-wrapper">
-      <div class="loading" *ngIf="cargando()">Cargando usuarios...</div>
+  <div class="admin-grid">
 
-      <table *ngIf="!cargando()">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Nombre</th>
-            <th>Email</th>
-            <th>Rol</th>
-            <th>Estado</th>
-            <th>Acción</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let u of usuarios()">
-            <td class="td-id">{{ u.id }}</td>
-            <td class="td-nombre">{{ u.nombre }}</td>
-            <td class="td-email">{{ u.email }}</td>
-            <td>
-              <span class="badge badge--rol">{{ u.rol }}</span>
-            </td>
-            <td>
-              <span class="badge" [class.badge--activo]="u.activo" [class.badge--inactivo]="!u.activo">
-                {{ u.activo ? 'Activo' : 'Inactivo' }}
-              </span>
-            </td>
-            <td>
-              <button
-                class="btn-toggle"
-                [class.desactivar]="u.activo"
-                [class.activar]="!u.activo"
-                (click)="toggleEstado(u)"
-              >
-                {{ u.activo ? 'Desactivar' : 'Activar' }}
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+    <!-- ════════════════════════════════════ -->
+    <!-- COCINA -->
+    <!-- ════════════════════════════════════ -->
+    <section class="admin-section admin-section--cocina">
+      <div class="admin-section__header">
+        <span class="admin-section__icon">👨‍🍳</span>
+        <h2>Cocina</h2>
+      </div>
+
+      @if (cargandoPedidos()) {
+        <p class="loading-msg">Cargando pedidos...</p>
+      } @else {
+        <div class="cocina-columns">
+
+          <!-- Pendientes -->
+          <div class="cocina-col cocina-col--pendiente">
+            <div class="cocina-col__header">
+              <span>🔴 Pendientes</span>
+              <span class="badge">{{ pendientes.length }}</span>
+            </div>
+            @for (p of pendientes; track p.id) {
+              <div class="pedido-card">
+                <div class="pedido-card__top">
+                  <span class="pedido-hora">{{ p.hora }}</span>
+                </div>
+                <p class="pedido-usuario">{{ p.usuario }}</p>
+                <ul class="pedido-items">
+                  @for (item of p.items; track item) {
+                    <li>{{ item }}</li>
+                  }
+                </ul>
+                <button class="btn-avanzar" (click)="avanzarEstado(p)">Iniciar →</button>
+              </div>
+            } @empty {
+              <p class="empty-col">Sin pendientes</p>
+            }
+          </div>
+
+          <!-- En preparación -->
+          <div class="cocina-col cocina-col--preparacion">
+            <div class="cocina-col__header">
+              <span>🟡 Preparación</span>
+              <span class="badge">{{ enPreparacion.length }}</span>
+            </div>
+            @for (p of enPreparacion; track p.id) {
+              <div class="pedido-card">
+                <div class="pedido-card__top">
+                  <span class="pedido-hora">{{ p.hora }}</span>
+                </div>
+                <p class="pedido-usuario">{{ p.usuario }}</p>
+                <ul class="pedido-items">
+                  @for (item of p.items; track item) {
+                    <li>{{ item }}</li>
+                  }
+                </ul>
+                <button class="btn-avanzar btn-avanzar--listo" (click)="avanzarEstado(p)">✓ Listo</button>
+              </div>
+            } @empty {
+              <p class="empty-col">Nada en preparación</p>
+            }
+          </div>
+
+          <!-- Listos -->
+          <div class="cocina-col cocina-col--listo">
+            <div class="cocina-col__header">
+              <span>🟢 Listos</span>
+              <span class="badge">{{ listos.length }}</span>
+            </div>
+            @for (p of listos; track p.id) {
+              <div class="pedido-card pedido-card--listo">
+                <div class="pedido-card__top">
+                  <span class="pedido-hora">{{ p.hora }}</span>
+                </div>
+                <p class="pedido-usuario">{{ p.usuario }}</p>
+                <ul class="pedido-items">
+                  @for (item of p.items; track item) {
+                    <li>{{ item }}</li>
+                  }
+                </ul>
+              </div>
+            } @empty {
+              <p class="empty-col">Ninguno listo aún</p>
+            }
+          </div>
+
+        </div>
+      }
+    </section>
+
+    <!-- ════════════════════════════════════ -->
+    <!-- CAJA -->
+    <!-- ════════════════════════════════════ -->
+    <section class="admin-section admin-section--caja">
+      <div class="admin-section__header">
+        <span class="admin-section__icon">🧾</span>
+        <h2>Caja</h2>
+        <span class="total-dia">Total hoy: <strong>{{ formatPrecio(totalCobradoHoy()) }}</strong></span>
+      </div>
+
+      @if (cargandoPedidos()) {
+        <p class="loading-msg">Cargando pedidos...</p>
+      } @else {
+        <div class="caja-columns">
+          <!-- Por cobrar -->
+          <div class="caja-col">
+            <h3>🟡 Por cobrar <span class="badge">{{ porCobrar.length }}</span></h3>
+            @for (p of porCobrar; track p.id) {
+              <div class="pedido-card">
+                <div class="pedido-card__top">
+                  <span class="pedido-usuario">{{ p.usuario }}</span>
+                  <span class="pedido-hora">{{ p.hora }}</span>
+                </div>
+                <ul class="pedido-items">
+                  @for (item of p.items; track item) {
+                    <li>{{ item }}</li>
+                  }
+                </ul>
+                <div class="pedido-card__footer">
+                  <span class="pedido-total">{{ formatPrecio(p.total) }}</span>
+                  <button class="btn-cobrar" (click)="cobrar(p)">Cobrar ✓</button>
+                </div>
+              </div>
+            } @empty {
+              <p class="empty-col">Sin pedidos por cobrar</p>
+            }
+          </div>
+
+          <!-- Cobrados -->
+          <div class="caja-col">
+            <h3>🟢 Cobrados hoy <span class="badge">{{ cobrados.length }}</span></h3>
+            @for (p of cobrados; track p.id) {
+              <div class="pedido-card pedido-card--cobrado">
+                <div class="pedido-card__top">
+                  <span class="pedido-usuario">{{ p.usuario }}</span>
+                  <span class="pedido-hora">{{ p.hora }}</span>
+                </div>
+                <span class="pedido-total">{{ formatPrecio(p.total) }}</span>
+              </div>
+            } @empty {
+              <p class="empty-col">Ningún cobro aún</p>
+            }
+          </div>
+        </div>
+      }
+    </section>
+
+    <!-- ════════════════════════════════════ -->
+    <!-- USUARIOS -->
+    <!-- ════════════════════════════════════ -->
+    <section class="admin-section admin-section--users">
+      <div class="admin-section__header">
+        <span class="admin-section__icon">👥</span>
+        <h2>Usuarios</h2>
+        <span class="total-dia">{{ usuarios().length }} registrados</span>
+      </div>
+
+      @if (cargandoUsers()) {
+        <p class="loading-msg">Cargando usuarios...</p>
+      } @else {
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Email</th>
+                <th>Rol</th>
+                <th>Estado</th>
+                <th>Acción</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (u of usuarios(); track u.id) {
+                <tr>
+                  <td class="td-nombre">{{ u.fullName }}</td>
+                  <td class="td-email">{{ u.email }}</td>
+                  <td>
+                    <span class="badge badge--rol">{{ u.role }}</span>
+                  </td>
+                  <td>
+                    <span class="badge" [class.badge--activo]="u.active" [class.badge--inactivo]="!u.active">
+                      {{ u.active ? 'Activo' : 'Inactivo' }}
+                    </span>
+                  </td>
+                  <td>
+                    <button class="btn-toggle"
+                      [class.desactivar]="u.active"
+                      [class.activar]="!u.active"
+                      (click)="toggleEstado(u)">
+                      {{ u.active ? 'Desactivar' : 'Activar' }}
+                    </button>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    </section>
+
   </div>
 </div>

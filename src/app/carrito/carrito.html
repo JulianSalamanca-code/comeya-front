@@ -1,0 +1,36 @@
+<div class="section app-container">
+  <h2 class="section-title">Tu Pedido</h2>
+
+  @if (cart().length === 0) {
+    <div class="cart-empty">
+      <div class="empty-icon">🛒</div>
+      <p>Tu carrito está vacío</p>
+    </div>
+  } @else {
+    <div class="cart-list">
+      @for (item of cart(); track item.id; let idx = $index) {
+        <div class="cart-item">
+          <img [src]="item.img" [alt]="item.nombre">
+          <div class="cart-item-info">
+            <div class="cart-item-name">{{ item.nombre }}</div>
+            <div class="cart-item-price">{{ formatPrecio(item.precio) }}</div>
+          </div>
+          <div class="qty-ctrl">
+            <button class="qty-btn" (click)="changeQty(idx, -1)">-</button>
+            <span class="qty-num">{{ item.qty }}</span>
+            <button class="qty-btn" (click)="changeQty(idx, 1)">+</button>
+          </div>
+        </div>
+      }
+    </div>
+
+    <div class="cart-summary">
+      <div class="cart-summary-row"><span>Subtotal</span><span>{{ formatPrecio(subtotal) }}</span></div>
+      <div class="cart-summary-row"><span>Servicio</span><span>{{ formatPrecio(delivery) }}</span></div>
+      <div class="cart-summary-row total"><span>Total</span><span>{{ formatPrecio(total) }}</span></div>
+      <button class="btn-pedido" (click)="realizarPedido()">🛒 Realizar Pedido</button>
+    </div>
+  }
+</div>
+
+<div class="page-spacer"></div>

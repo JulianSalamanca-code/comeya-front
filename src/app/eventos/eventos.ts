@@ -1,13 +1,5 @@
-import { Component, signal } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
-interface Evento {
-  titulo: string;
-  descripcion: string;
-  fecha: string;
-  emoji: string;
-  tipo: string;
-}
 
 @Component({
   selector: 'app-eventos',
@@ -17,12 +9,9 @@ interface Evento {
   styleUrl: './eventos.scss'
 })
 export class EventosComponent {
-  eventos = signal<Evento[]>([
-    { titulo: 'Semana Gastronómica', descripcion: 'Platos típicos colombianos a precio especial durante toda la semana.', fecha: '19 - 23 May', emoji: '🇨🇴', tipo: 'Evento' },
-    { titulo: '2x1 en Jugos', descripcion: 'Lleva dos jugos naturales por el precio de uno todos los miércoles.', fecha: 'Cada miércoles', emoji: '🥤', tipo: 'Promoción' },
-    { titulo: 'Menú Vegetariano', descripcion: 'Nueva línea de platos vegetarianos disponibles a partir de esta semana.', fecha: 'Permanente', emoji: '🥗', tipo: 'Nuevo' },
-    { titulo: 'Descuento Carnet', descripcion: '20% de descuento presentando tu carnet universitario vigente.', fecha: 'Todo el mes', emoji: '🎓', tipo: 'Promoción' },
-    { titulo: 'Almuerzo Ejecutivo', descripcion: 'Sopa + plato fuerte + jugo + postre por $15.000.', fecha: 'Lunes a viernes', emoji: '🍱', tipo: 'Especial' },
-    { titulo: 'Taller de Cocina', descripcion: 'Únete al taller de cocina saludable organizado por Bienestar Universitario.', fecha: '28 May', emoji: '👨‍🍳', tipo: 'Evento' },
-  ]);
+  eventos = [
+    { titulo: 'Waffle Fest', desc: 'Todos los viernes: waffles con toppings especiales a precio especial.', img: 'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=400&q=80' },
+    { titulo: 'Happy Coffee', desc: 'Lunes y miércoles: 2x1 en todas las bebidas calientes de 7am a 10am.', img: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=400&q=80' },
+    { titulo: 'Menú Ejecutivo', desc: 'Almuerzo completo por $12,000. Incluye sopa, plato fuerte y bebida.', img: 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=400&q=80' },
+  ];
 }

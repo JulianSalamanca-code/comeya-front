@@ -1,41 +1,314 @@
 <div class="dashboard">
-  <!-- Hero -->
+
+  <!-- HERO -->
   <section class="hero">
+
     <div class="hero__content">
-      <p class="hero__saludo">¡Bienvenido de nuevo! 👋</p>
-      <h1 class="hero__titulo">¿Qué vamos a comer hoy?</h1>
-      <p class="hero__sub">Cafetería Universitaria · ComeYa</p>
+
+      <p class="hero__saludo">
+        ¡Bienvenido {{ username }}! 👋
+      </p>
+
+      <h1 class="hero__titulo">
+
+        <ng-container *ngIf="rol === 'ADMIN'">
+          Panel Administrativo
+        </ng-container>
+
+        <ng-container *ngIf="rol === 'STAFF_COCINA'">
+          Pedidos en Cocina 🍳
+        </ng-container>
+
+        <ng-container *ngIf="rol === 'STAFF_CAJERO'">
+          Panel de Caja 💳
+        </ng-container>
+
+        <ng-container *ngIf="rol === 'USER'">
+          ¿Qué vamos a comer hoy?
+        </ng-container>
+
+      </h1>
+
+      <p class="hero__sub">
+        Cafetería Universitaria · ComeYa
+      </p>
+
     </div>
-    <div class="hero__deco">🍽</div>
+
+    <div class="hero__deco">
+
+      <ng-container *ngIf="rol === 'ADMIN'">
+        📊
+      </ng-container>
+
+      <ng-container *ngIf="rol === 'STAFF_COCINA'">
+        🍳
+      </ng-container>
+
+      <ng-container *ngIf="rol === 'STAFF_CAJERO'">
+        💳
+      </ng-container>
+
+      <ng-container *ngIf="rol === 'USER'">
+        🍽
+      </ng-container>
+
+    </div>
+
   </section>
 
-  <!-- Acceso rápido -->
+  <!-- STATS -->
+  <section
+    class="stats-grid"
+    *ngIf="rol !== 'USER'"
+  >
+
+    <div class="stat-card">
+
+      <span class="stat-card__icon">
+        📦
+      </span>
+
+      <div>
+
+        <strong>
+          {{ totalPedidos() }}
+        </strong>
+
+        <p>Pedidos</p>
+
+      </div>
+
+    </div>
+
+    <div class="stat-card">
+
+      <span class="stat-card__icon">
+        ⏳
+      </span>
+
+      <div>
+
+        <strong>
+          {{ pedidosPreparacion() }}
+        </strong>
+
+        <p>En preparación</p>
+
+      </div>
+
+    </div>
+
+    <div class="stat-card">
+
+      <span class="stat-card__icon">
+        ✅
+      </span>
+
+      <div>
+
+        <strong>
+          {{ pedidosListos() }}
+        </strong>
+
+        <p>Listos</p>
+
+      </div>
+
+    </div>
+
+    <div
+      class="stat-card"
+      *ngIf="rol === 'ADMIN'"
+    >
+
+      <span class="stat-card__icon">
+        👥
+      </span>
+
+      <div>
+
+        <strong>
+          {{ totalUsuarios() }}
+        </strong>
+
+        <p>Usuarios</p>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- ACCESO RAPIDO -->
   <section class="seccion">
-    <h2 class="seccion__titulo">Acceso rápido</h2>
+
+    <h2 class="seccion__titulo">
+      Acceso rápido
+    </h2>
+
     <div class="cards-grid">
+
       <a
         *ngFor="let item of accesos"
         [routerLink]="item.ruta"
         class="card"
       >
-        <span class="card__icon">{{ item.icon }}</span>
-        <strong class="card__label">{{ item.label }}</strong>
-        <p class="card__desc">{{ item.desc }}</p>
+
+        <span class="card__icon">
+          {{ item.icon }}
+        </span>
+
+        <strong class="card__label">
+          {{ item.label }}
+        </strong>
+
+        <p class="card__desc">
+          {{ item.desc }}
+        </p>
+
       </a>
+
     </div>
+
   </section>
 
-  <!-- Eventos recientes -->
-  <section class="seccion">
-    <h2 class="seccion__titulo">Novedades recientes</h2>
-    <div class="eventos-lista">
-      <div class="evento" *ngFor="let e of eventosRecientes()">
-        <span class="evento__fecha">{{ e.fecha }}</span>
-        <div class="evento__info">
-          <strong>{{ e.titulo }}</strong>
-          <p>{{ e.desc }}</p>
+  <!-- PANEL COCINA -->
+  <section
+    class="seccion"
+    *ngIf="rol === 'STAFF_COCINA' || rol === 'ADMIN'"
+  >
+
+    <h2 class="seccion__titulo">
+      Pedidos en cocina
+    </h2>
+
+    <div class="orders-grid">
+
+      <div
+        class="order-card"
+        *ngFor="let order of orders()"
+      >
+
+        <div class="order-card__top">
+
+          <h3>
+            Pedido
+          </h3>
+
+          <span class="estado">
+            {{ order.estado }}
+          </span>
+
         </div>
+
+        <p>
+          Mesa {{ order.mesa }}
+        </p>
+
+        <ul>
+
+          <li
+            *ngFor="let item of order.items"
+          >
+            {{ item.nombre }}
+          </li>
+
+        </ul>
+
+        <button
+          *ngIf="order.estado === 'NUEVO'"
+          (click)="iniciarPreparacion(order.id)"
+        >
+          Iniciar preparación
+        </button>
+
+        <button
+          *ngIf="order.estado === 'EN_PREPARACION'"
+          (click)="marcarListo(order.id)"
+        >
+          Marcar listo
+        </button>
+
       </div>
+
     </div>
+
   </section>
+
+  <!-- PANEL CAJERO -->
+  <section
+    class="seccion"
+    *ngIf="rol === 'STAFF_CAJERO' || rol === 'ADMIN'"
+  >
+
+    <h2 class="seccion__titulo">
+      Últimos pedidos
+    </h2>
+
+    <div class="eventos-lista">
+
+      <div
+        class="evento"
+        *ngFor="let order of recentOrders()"
+      >
+
+        <span class="evento__fecha">
+          Pedido
+        </span>
+
+        <div class="evento__info">
+
+          <strong>
+            {{ order.cliente }}
+          </strong>
+
+          <p>
+            {{ order.estado }}
+          </p>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- NOVEDADES -->
+  <section class="seccion">
+
+    <h2 class="seccion__titulo">
+      Novedades recientes
+    </h2>
+
+    <div class="eventos-lista">
+
+      <div
+        class="evento"
+        *ngFor="let e of eventosRecientes()"
+      >
+
+        <span class="evento__fecha">
+          {{ e.fecha }}
+        </span>
+
+        <div class="evento__info">
+
+          <strong>
+            {{ e.titulo }}
+          </strong>
+
+          <p>
+            {{ e.desc }}
+          </p>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
 </div>

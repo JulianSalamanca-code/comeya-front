@@ -1,113 +1,73 @@
-.eventos-page {
-  max-width: 1000px;
-  margin: 0 auto;
-  padding: 32px 24px 48px;
+.section {
+  padding-top: 24px;
+  padding-bottom: 24px;
 }
 
-.eventos-header {
-  margin-bottom: 32px;
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin-bottom: 16px;
 
-  h1 {
-    font-size: 1.8rem;
-    font-weight: 700;
-    color: var(--brand);
-    margin-bottom: 4px;
-  }
-
-  p {
-    color: var(--text-muted);
-    font-size: 0.95rem;
-  }
+  @media (min-width: 768px) { font-size: 24px; }
 }
 
-.eventos-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 20px;
-}
-
-.evento-card {
-  background: var(--card);
+.evento-card-full {
+  background: white;
   border-radius: 18px;
-  border: 1.5px solid var(--border);
-  padding: 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  transition: transform 0.2s, box-shadow 0.2s;
+  overflow: hidden;
+  margin-bottom: 16px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+  transition: transform 0.2s;
 
-  &:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 10px 28px rgba(0,0,0,0.09);
+  &:hover { transform: translateY(-3px); }
+
+  img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+
+    @media (min-width: 768px) { height: 200px; }
   }
 
-  &__top {
+  @media (min-width: 768px) {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
+    max-height: 220px;
 
-  &__emoji {
-    font-size: 2rem;
-  }
-
-  &__tipo {
-    font-size: 0.75rem;
-    font-weight: 700;
-    padding: 4px 12px;
-    border-radius: 50px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-
-    &[data-tipo="Promoción"] { background: #fff3e0; color: #e65100; }
-    &[data-tipo="Evento"]    { background: #e3f2fd; color: #1565c0; }
-    &[data-tipo="Nuevo"]     { background: #e8f5e9; color: #2e7d32; }
-    &[data-tipo="Especial"]  { background: #fce4ec; color: #c62828; }
-  }
-
-  &__titulo {
-    font-size: 1.05rem;
-    font-weight: 700;
-    line-height: 1.3;
-  }
-
-  &__desc {
-    font-size: 0.88rem;
-    color: var(--text-muted);
-    line-height: 1.5;
-    flex: 1;
-  }
-
-  &__footer {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-top: 4px;
-  }
-
-  &__fecha {
-    font-size: 0.82rem;
-    color: var(--text-muted);
-  }
-
-  &__btn {
-    padding: 7px 16px;
-    background: var(--brand);
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    font-size: 0.85rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.2s;
-
-    &:hover {
-      background: var(--brand-dark);
+    img {
+      width: 300px;
+      height: auto;
+      flex-shrink: 0;
     }
   }
 }
 
-@media (max-width: 600px) {
-  .eventos-page { padding: 24px 16px 40px; }
-  .eventos-header h1 { font-size: 1.4rem; }
+.evento-body {
+  padding: 16px;
+
+  @media (min-width: 768px) {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+}
+
+.evento-titulo {
+  font-family: 'Playfair Display', serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin-bottom: 6px;
+
+  @media (min-width: 768px) { font-size: 20px; }
+}
+
+.evento-desc {
+  font-size: 14px;
+  color: var(--text-muted);
+  line-height: 1.5;
+
+  @media (min-width: 768px) { font-size: 15px; }
 }

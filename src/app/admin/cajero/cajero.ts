@@ -20,6 +20,7 @@ interface Pedido {
 })
 export class CajeroComponent implements OnInit {
   private api = inject(ApiService);
+  private isBrowser = typeof window !== 'undefined';
 
   pedidos = signal<Pedido[]>([]);
   cargando = signal(true);
@@ -31,6 +32,11 @@ export class CajeroComponent implements OnInit {
   );
 
   ngOnInit() {
+    if (!this.isBrowser) {
+      this.cargando.set(false);
+      return;
+    }
+
     this.api.getPedidos().subscribe({
       next: (data: any) => {
         this.pedidos.set(data);

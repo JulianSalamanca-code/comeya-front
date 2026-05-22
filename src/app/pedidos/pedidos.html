@@ -1,0 +1,25 @@
+<div class="section app-container">
+  <h2 class="section-title">Mis Pedidos</h2>
+
+  <div class="orders-grid">
+  @for (o of pedidos; track o.id) {
+    <div class="order-card">
+      <div class="order-header">
+        <div>
+          <div class="order-id">{{ o.id }}</div>
+          <div class="order-time">{{ o.mesa }} · {{ o.hora }}</div>
+        </div>
+        <span class="order-status" [class]="statusClass[o.estado] || ''">
+          {{ statusLabel[o.estado] || o.estado }}
+        </span>
+      </div>
+      <div class="order-items">{{ o.items.join(' · ') }}</div>
+      <div class="order-total">{{ formatPrecio(o.total) }}</div>
+    </div>
+  } @empty {
+    <p class="empty-msg">No tienes pedidos aún</p>
+  }
+  </div>
+</div>
+
+<div class="page-spacer"></div>

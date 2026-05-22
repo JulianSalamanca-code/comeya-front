@@ -1,30 +1,29 @@
-<div class="menu-page">
-  <div class="menu-header">
-    <h1>Menú del día</h1>
-    <p>Lo que hay hoy en tu cafetería</p>
+<div class="section app-container">
+  <h2 class="section-title">Menú del Día</h2>
+
+  <div class="chip-row">
+    @for (cat of categorias; track cat) {
+      <button class="chip" [class.active]="categoriaActiva() === cat" (click)="setCategoria(cat)">
+        {{ cat }}
+      </button>
+    }
   </div>
 
-  <!-- Tabs -->
-  <div class="tabs">
-    <button
-      *ngFor="let cat of categorias"
-      class="tab"
-      [class.active]="categoriaActiva() === cat"
-      (click)="setCategoria(cat)"
-    >
-      {{ cat }}
-    </button>
-  </div>
-
-  <!-- Grid de platos -->
-  <div class="platos-grid">
-    <div class="plato" *ngFor="let plato of platosFiltrados">
-      <div class="plato__emoji">{{ plato.emoji }}</div>
-      <div class="plato__info">
-        <strong>{{ plato.nombre }}</strong>
-        <p>{{ plato.desc }}</p>
+  <div class="menu-grid">
+    @for (plato of platosFiltrados; track plato.id) {
+      <div class="menu-card">
+        <img [src]="plato.img" [alt]="plato.nombre" loading="lazy">
+        <div class="menu-card-body">
+          <div class="menu-card-name">{{ plato.nombre }}</div>
+          <div class="menu-card-desc">{{ plato.desc }}</div>
+          <div class="menu-card-footer">
+            <span class="menu-card-price">{{ formatPrecio(plato.precio) }}</span>
+            <button class="btn-add">+</button>
+          </div>
+        </div>
       </div>
-      <span class="plato__precio">{{ formatPrecio(plato.precio) }}</span>
-    </div>
+    }
   </div>
 </div>
+
+<div class="page-spacer"></div>

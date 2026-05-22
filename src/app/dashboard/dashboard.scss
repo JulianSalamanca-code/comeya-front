@@ -229,3 +229,244 @@
     gap: 10px;
   }
 }
+
+/* ───────────────── STATS ───────────────── */
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin-bottom: 36px;
+}
+
+.stat-card {
+  background: var(--card);
+  border-radius: 20px;
+  padding: 22px;
+  border: 2px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  transition: all 0.25s;
+
+  &:hover {
+    transform: translateY(-4px);
+    border-color: var(--brand);
+    box-shadow: 0 10px 28px rgba(200,75,15,0.12);
+  }
+
+  &__icon {
+    width: 58px;
+    height: 58px;
+    border-radius: 16px;
+    background: linear-gradient(
+      135deg,
+      var(--brand),
+      #e8621a
+    );
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 1.8rem;
+    color: white;
+
+    box-shadow: 0 8px 18px rgba(200,75,15,0.25);
+  }
+
+  strong {
+    display: block;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  p {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    margin-top: 4px;
+  }
+}
+
+/* ───────────────── ORDERS ───────────────── */
+
+.orders-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 18px;
+}
+
+.order-card {
+  background: var(--card);
+  border-radius: 20px;
+  border: 2px solid var(--border);
+  padding: 22px;
+  transition: all 0.25s;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  position: relative;
+  overflow: hidden;
+
+  &:hover {
+    transform: translateY(-4px);
+    border-color: var(--brand);
+    box-shadow: 0 12px 30px rgba(200,75,15,0.12);
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+
+    background: linear-gradient(
+      90deg,
+      var(--brand),
+      #e8621a
+    );
+  }
+
+  &__top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    h3 {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+  }
+
+  p {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+  }
+
+  ul {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding-left: 18px;
+
+    li {
+      font-size: 0.85rem;
+      color: var(--text);
+    }
+  }
+
+  button {
+    border: none;
+    border-radius: 12px;
+    padding: 12px 14px;
+    font-size: 0.84rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+
+    background: linear-gradient(
+      135deg,
+      var(--brand),
+      #e8621a
+    );
+
+    color: white;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 18px rgba(200,75,15,0.25);
+    }
+  }
+}
+
+/* ───────────────── ESTADOS ───────────────── */
+
+.estado {
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+
+  background: rgba(200,75,15,0.1);
+  color: var(--brand);
+  border: 1px solid rgba(200,75,15,0.18);
+}
+
+.estado--nuevo {
+  background: rgba(59,130,246,0.12);
+  color: #2563eb;
+}
+
+.estado--preparacion {
+  background: rgba(245,158,11,0.14);
+  color: #d97706;
+}
+
+.estado--listo {
+  background: rgba(34,197,94,0.14);
+  color: #16a34a;
+}
+
+.estado--entregado {
+  background: rgba(107,114,128,0.14);
+  color: #6b7280;
+}
+
+/* ───────────────── RESPONSIVE EXTRA ───────────────── */
+
+@media (max-width: 768px) {
+
+  .stats-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .orders-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .stat-card {
+    padding: 18px;
+
+    &__icon {
+      width: 48px;
+      height: 48px;
+      font-size: 1.4rem;
+    }
+
+    strong {
+      font-size: 1.3rem;
+    }
+  }
+}
+
+@media (max-width: 500px) {
+
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cards-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hero {
+
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+
+    &__deco {
+      align-self: flex-end;
+    }
+  }
+
+  .order-card {
+    padding: 18px;
+  }
+}

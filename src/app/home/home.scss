@@ -1,0 +1,245 @@
+/* ── Hero ── */
+.hero {
+  position: relative;
+  overflow: hidden;
+  min-height: 280px;
+  background: linear-gradient(160deg, #1a0a03 0%, #3d1f0a 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 24px 0 28px;
+  border-radius: 0 0 32px 32px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+
+  @media (min-width: 768px) {
+    min-height: 340px;
+    padding: 48px 0 40px;
+    border-radius: 0 0 40px 40px;
+  }
+
+  @media (min-width: 1024px) {
+    min-height: 400px;
+    padding: 64px 0 48px;
+    border-radius: 0 0 48px 48px;
+  }
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background: url('https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=1400&q=80') center/cover;
+  opacity: 0.3;
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(0deg, rgba(26,10,3,0.9) 0%, rgba(26,10,3,0.4) 60%, transparent 100%);
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 680px;
+
+  @media (min-width: 768px) {
+    max-width: 800px;
+  }
+}
+
+.hero-greeting {
+  font-size: 13px;
+  color: rgba(255,255,255,0.6);
+  margin-bottom: 4px;
+}
+
+.hero-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 32px;
+  font-weight: 900;
+  color: white;
+  line-height: 1.15;
+  margin-bottom: 24px;
+
+  em {
+    color: var(--orange-light);
+    font-style: normal;
+  }
+
+  @media (min-width: 768px) {
+    font-size: 44px;
+  }
+
+  @media (min-width: 1024px) {
+    font-size: 52px;
+  }
+}
+
+.hero-btns {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 400px;
+
+  @media (min-width: 768px) {
+    flex-direction: row;
+    max-width: none;
+    gap: 14px;
+  }
+}
+
+.btn-hero {
+  background: var(--orange);
+  border: none;
+  border-radius: 14px;
+  padding: 14px 20px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: all 0.2s;
+  box-shadow: 0 6px 18px rgba(200,84,26,0.35);
+  text-decoration: none;
+
+  &:hover {
+    background: var(--orange-light);
+    transform: translateY(-2px);
+  }
+
+  .arrow { font-size: 18px; opacity: 0.8; }
+
+  @media (min-width: 768px) {
+    padding: 16px 24px;
+    font-size: 16px;
+    flex: 1;
+  }
+}
+
+/* ── Section ── */
+.section {
+  padding-top: 24px;
+  padding-bottom: 24px;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-dark);
+  white-space: nowrap;
+
+  @media (min-width: 768px) {
+    font-size: 24px;
+  }
+}
+
+.section-divider {
+  flex: 1;
+  height: 1px;
+  background: var(--orange);
+  opacity: 0.3;
+  margin: 0 14px;
+}
+
+/* ── Eventos Row ── */
+.eventos-row {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  scrollbar-width: none;
+  margin: 0 -4px;
+  padding: 0 4px;
+
+  &::-webkit-scrollbar { display: none; }
+
+  @media (min-width: 768px) {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    overflow-x: visible;
+    gap: 16px;
+    margin: 0;
+    padding: 0;
+  }
+}
+
+.evento-card {
+  flex: 0 0 130px;
+  border-radius: 16px;
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
+  transition: transform 0.2s;
+  aspect-ratio: 1;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+
+  &:hover { transform: scale(1.03); }
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  @media (min-width: 768px) {
+    flex: none;
+    aspect-ratio: 3/4;
+  }
+}
+
+.evento-card-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(0deg, rgba(0,0,0,0.65) 0%, transparent 60%);
+  display: flex;
+  align-items: flex-end;
+  padding: 10px;
+}
+
+.evento-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: white;
+  line-height: 1.2;
+}
+
+.btn-mas-info {
+  background: var(--orange);
+  border: none;
+  border-radius: 14px;
+  padding: 14px;
+  width: 100%;
+  max-width: 400px;
+  display: block;
+  margin: 16px auto 0;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 6px 18px rgba(200,84,26,0.3);
+  text-align: center;
+
+  &:hover {
+    background: var(--orange-light);
+    transform: translateY(-1px);
+  }
+
+  @media (min-width: 768px) {
+    max-width: 300px;
+  }
+}
+
+a { text-decoration: none; }
