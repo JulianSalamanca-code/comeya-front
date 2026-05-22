@@ -2,6 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { map, tap } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
 
 export interface LoginResponse {
   token: string;
@@ -18,7 +19,7 @@ export class ApiService {
   private router = inject(Router);
 
   // ───────────────── API BASE ─────────────────
-  private base = 'http://localhost:8080/api';
+  private base = environment.apiUrl;
 
   private unwrapData<T>() {
     return map((res: any) => res?.data);
