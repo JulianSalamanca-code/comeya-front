@@ -1,0 +1,60 @@
+@if (panelOpen()) {
+  <div class="notifications-backdrop" (click)="onBackdropClick($event)"></div>
+}
+
+<div class="notifications">
+  <button
+    type="button"
+    class="notifications__button"
+    (click)="togglePanel()"
+    aria-label="Notificaciones"
+  >
+    <span class="notifications__icon">🔔</span>
+    @if (unreadCount() > 0) {
+      <span class="notifications__badge">{{ unreadCount() }}</span>
+    }
+  </button>
+
+  @if (panelOpen()) {
+    <section #panel class="notifications__panel">
+      <header class="notifications__header">
+        <div>
+          <strong>Notificaciones</strong>
+          <p>{{ unreadCount() }} sin leer</p>
+        </div>
+        @if (unreadCount() > 0) {
+          <button type="button" class="notifications__mark-all" (click)="markAllAsRead()">
+            Marcar todas
+          </button>
+        }
+      </header>
+
+      <div class="notifications__list">
+        @if (loading()) {
+          <div class="notifications__loading">Cargando notificaciones...</div>
+        } @else if (notifications().length === 0) {
+          <div class="notifications__empty">No tienes notificaciones nuevas.</div>
+        } @else {
+          <ul>
+            @for (notification of notifications(); track notification.id) {
+              <li
+                class="notification-item"
+                [class.notification-item--unread]="!notification.read"
+                (click)="markAsRead(notification)"
+              >
+                <div class="notification-item__meta">
+                  <span class="notification-item__type">{{ notification.type }}</span>
+                  <time>{{ notification.date }}</time>
+                </div>
+                <div class="notification-item__body">
+                  <strong>{{ notification.title }}</strong>
+                  <p>{{ notification.message }}</p>
+                </div>
+              </li>
+            }
+          </ul>
+        }
+      </div>
+    </section>
+  }
+</div>

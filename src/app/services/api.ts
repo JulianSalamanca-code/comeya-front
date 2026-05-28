@@ -6,8 +6,8 @@ import { environment } from '../../environments/environment';
 
 export interface LoginResponse {
   token: string;
-  rol: 'USER' | 'STAFF_COCINA' | 'STAFF_CAJERO' | 'ADMIN';
-  username: string;
+  role: 'CUSTOMER' | 'STAFF_COCINA' | 'STAFF_CAJERO' | 'ADMIN';
+  name: string;
 }
 
 @Injectable({
@@ -27,29 +27,25 @@ export class ApiService {
 
   // ───────────────── AUTH ─────────────────
 
-  login(username: string, password: string) {
+  login(email: string, password: string) {
 
     return this.http.post<LoginResponse>(
       `${this.base}/auth/login`,
-      {
-        username,
-        password
-      }
+      { email, password }
     ).pipe(
       map((res: any) => res?.data as LoginResponse),
-      tap(({ token, rol, username }) => {
+      tap(({ token, role, name }) => {
         if (typeof window !== 'undefined') {
           localStorage.setItem('token', token);
-          localStorage.setItem('rol', rol);
-          localStorage.setItem('username', username);
+          localStorage.setItem('rol', role);
+          localStorage.setItem('username', name);
         }
       })
     );
   }
 
   register(data: {
-    fullName: string;
-    username: string;
+    name: string;
     email: string;
     password: string;
   }) {
@@ -109,7 +105,7 @@ export class ApiService {
 
   isUser(): boolean {
 
-    return this.getRol() === 'USER';
+    return this.getRol() === 'CUSTOMER';
   }
 
   // ───────────────── USERS ─────────────────
