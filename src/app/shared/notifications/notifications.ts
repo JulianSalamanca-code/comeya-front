@@ -1,6 +1,7 @@
 import { Component, computed, DestroyRef, ElementRef, inject, signal, viewChild } from '@angular/core';
 import { NotificationService, NotificationItem } from '../../services/notification';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ApiService } from '../../services/api';
 
 @Component({
   selector: 'app-notifications',
@@ -10,6 +11,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 })
 export class NotificationsComponent {
   private notificationService = inject(NotificationService);
+  private api = inject(ApiService);
   private destroyRef = inject(DestroyRef);
 
   readonly panel = viewChild<ElementRef<HTMLElement>>('panel');
@@ -21,6 +23,17 @@ export class NotificationsComponent {
   unreadCount = computed(() => this.notifications().filter(item => !item.read).length);
 
   constructor() {
+    if (this.api.isLoggedIn()) {
+      this.notificationService.connectWebSocket();
+    }
+
+    this.notificationService.notifications$.pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe(notifications => {
+      this.notifications.set(notifications);
+      this.loading.set(false);
+    });
+
     this.loadNotifications();
   }
 
@@ -37,30 +50,18 @@ export class NotificationsComponent {
     this.notificationService.getNotifications().pipe(
       takeUntilDestroyed(this.destroyRef)
     ).subscribe({
-      next: notifications => {
-        this.notifications.set(notifications);
-        this.loading.set(false);
-      },
-      error: () => {
-        this.notifications.set([]);
-        this.loading.set(false);
-      }
+      next: () => {},
+      error: () => this.loading.set(false)
     });
   }
 
   markAsRead(notification: NotificationItem) {
     if (notification.read) return;
-    this.notifications.update(list =>
-      list.map(item =>
-        item.id === notification.id ? { ...item, read: true } : item
-      )
-    );
+    this.notificationService.markAsRead(notification.id);
   }
 
   markAllAsRead() {
-    this.notifications.update(list =>
-      list.map(item => ({ ...item, read: true }))
-    );
+    this.notificationService.markAllAsRead();
   }
 
   onBackdropClick(event: MouseEvent) {
