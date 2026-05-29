@@ -32,9 +32,14 @@ export class ForgotPasswordComponent {
     this.cargando.set(true);
 
     this.api.forgotPassword(this.email).subscribe({
-      next: () => {
+      next: (token: string) => {
         this.cargando.set(false);
-        this.exito.set('Si el correo está registrado, recibirás un enlace para restablecer tu contraseña.');
+        if (token) {
+          this.token = token;
+          this.exito.set(`Token generado: ${token}. Se ha autocompletado el campo.`);
+        } else {
+          this.exito.set('Si el correo está registrado, recibirás un enlace para restablecer tu contraseña.');
+        }
         this.step.set('token');
       },
       error: () => {

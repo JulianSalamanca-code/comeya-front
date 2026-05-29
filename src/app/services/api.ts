@@ -61,10 +61,10 @@ export class ApiService {
   }
 
   forgotPassword(email: string) {
-    return this.http.post(
+    return this.http.post<{ data: string }>(
       `${this.base}/auth/forgot-password`,
       { email }
-    );
+    ).pipe(map(res => res.data));
   }
 
   resetPassword(token: string, newPassword: string) {
