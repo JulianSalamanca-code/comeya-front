@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  apiUrl: '/api',
-  wsUrl: '/api/ws',
+  apiUrl: 'https://comeya.onrender.com/api',
+  wsUrl: 'wss://comeya.onrender.com/api/ws',
 };
