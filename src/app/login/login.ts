@@ -30,13 +30,15 @@ export class LoginComponent {
     this.api.login(this.email, this.contrasena).subscribe({
       next: (res) => {
         this.cargando.set(false);
-        const target = res.role === 'STAFF_COCINA' ? '/cocina'
+        const target = res.role === 'ADMIN' ? '/admin'
+          : res.role === 'STAFF_COCINA' ? '/cocina'
           : res.role === 'STAFF_CAJERO' ? '/cajero'
           : '/home';
         this.router.navigate([target]);
       },
-      error: () => {
+      error: (err) => {
         this.cargando.set(false);
+        console.error('Login error:', err);
         this.error.set('Correo o contraseña incorrectos.');
       }
     });
