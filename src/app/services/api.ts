@@ -229,6 +229,18 @@ export class ApiService {
     return this.http.get(`${this.base}/cafeterias`).pipe(map(unwrap));
   }
 
+  createCafeteria(data: any) {
+    return this.http.post(`${this.base}/cafeterias`, data).pipe(map(unwrap));
+  }
+
+  updateCafeteria(id: number, data: any) {
+    return this.http.put(`${this.base}/cafeterias/${id}`, data).pipe(map(unwrap));
+  }
+
+  deleteCafeteria(id: number) {
+    return this.http.delete(`${this.base}/cafeterias/${id}`).pipe(map(unwrap));
+  }
+
   // ───────────────── PAYMENTS ─────────────────
 
   getPayments() {

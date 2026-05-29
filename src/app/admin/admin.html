@@ -8,8 +8,17 @@
     <button class="btn-logout" (click)="logout()">Salir</button>
   </header>
 
+  <nav class="admin-tabs">
+    <button class="admin-tab" [class.active]="tab() === 'cocina'" (click)="tab.set('cocina')">👨‍🍳 Cocina</button>
+    <button class="admin-tab" [class.active]="tab() === 'caja'" (click)="tab.set('caja')">🧾 Caja</button>
+    <button class="admin-tab" [class.active]="tab() === 'usuarios'" (click)="tab.set('usuarios')">👥 Usuarios</button>
+    <button class="admin-tab" [class.active]="tab() === 'productos'" (click)="tab.set('productos')">🍽️ Productos</button>
+    <button class="admin-tab" [class.active]="tab() === 'cafeterias'" (click)="tab.set('cafeterias')">🏪 Cafeterías</button>
+  </nav>
+
   <div class="admin-grid">
 
+    @if (tab() === 'cocina') {
     <!-- ════════════════════════════════════ -->
     <!-- COCINA -->
     <!-- ════════════════════════════════════ -->
@@ -98,7 +107,9 @@
         </div>
       }
     </section>
+    }
 
+    @if (tab() === 'caja') {
     <!-- ════════════════════════════════════ -->
     <!-- CAJA -->
     <!-- ════════════════════════════════════ -->
@@ -155,7 +166,9 @@
         </div>
       }
     </section>
+    }
 
+    @if (tab() === 'usuarios') {
     <!-- ════════════════════════════════════ -->
     <!-- USUARIOS -->
     <!-- ════════════════════════════════════ -->
@@ -208,6 +221,19 @@
         </div>
       }
     </section>
+    }
+
+    @if (tab() === 'productos') {
+    <section class="admin-section">
+      <app-admin-productos />
+    </section>
+    }
+
+    @if (tab() === 'cafeterias') {
+    <section class="admin-section">
+      <app-admin-cafeterias />
+    </section>
+    }
 
   </div>
 </div>

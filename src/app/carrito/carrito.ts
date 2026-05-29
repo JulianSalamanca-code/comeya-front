@@ -1,5 +1,6 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ApiService } from '../services/api';
 
@@ -14,17 +15,20 @@ interface CartItem {
 @Component({
   selector: 'app-carrito',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './carrito.html',
   styleUrl: './carrito.scss'
 })
-export class CartComponent {
+export class CartComponent implements OnInit {
   private api = inject(ApiService);
   private router = inject(Router);
 
   cart = signal<CartItem[]>(this.loadCart());
   cargando = signal(false);
   error = signal('');
+
+  cafeterias: any[] = [];
+  cafeteriaId: number | null = null;
 
   private loadCart(): CartItem[] {
     if (typeof window === 'undefined') return [];
@@ -72,6 +76,18 @@ export class CartComponent {
     return '$' + p.toLocaleString('es-CO');
   }
 
+  ngOnInit() {
+    if (typeof window === 'undefined') return;
+    this.api.getCafeterias().subscribe({
+      next: (data: any) => {
+        this.cafeterias = Array.isArray(data) ? data : data?.content || [];
+        if (this.cafeterias.length > 0) {
+          this.cafeteriaId = this.cafeterias[0].id;
+        }
+      }
+    });
+  }
+
   realizarPedido() {
     const items = this.cart();
     if (items.length === 0) return;
@@ -79,52 +95,21 @@ export class CartComponent {
     this.cargando.set(true);
     this.error.set('');
 
-    this.api.getCafeterias().subscribe({
-      next: (cafeterias: any) => {
-        const cafeteriaId = Array.isArray(cafeterias) && cafeterias.length > 0 ? cafeterias[0].id : 1;
+    const order = {
+      cafeteriaId: this.cafeteriaId || 1,
+      items: items.map(i => ({ productId: i.id, quantity: i.qty }))
+    };
 
-        const order = {
-          cafeteriaId,
-          items: items.map(i => ({
-            productId: i.id,
-            quantity: i.qty
-          }))
-        };
-
-        this.api.crearOrder(order).subscribe({
-          next: () => {
-            this.cargando.set(false);
-            this.cart.set([]);
-            this.save();
-            this.router.navigate(['/pedidos']);
-          },
-          error: () => {
-            this.cargando.set(false);
-            this.error.set('Error al crear el pedido. Intenta de nuevo.');
-          }
-        });
+    this.api.crearOrder(order).subscribe({
+      next: () => {
+        this.cargando.set(false);
+        this.cart.set([]);
+        this.save();
+        this.router.navigate(['/pedidos']);
       },
       error: () => {
-        const order = {
-          cafeteriaId: 1,
-          items: items.map(i => ({
-            productId: i.id,
-            quantity: i.qty
-          }))
-        };
-
-        this.api.crearOrder(order).subscribe({
-          next: () => {
-            this.cargando.set(false);
-            this.cart.set([]);
-            this.save();
-            this.router.navigate(['/pedidos']);
-          },
-          error: () => {
-            this.cargando.set(false);
-            this.error.set('Error al crear el pedido. Intenta de nuevo.');
-          }
-        });
+        this.cargando.set(false);
+        this.error.set('Error al crear el pedido. Intenta de nuevo.');
       }
     });
   }

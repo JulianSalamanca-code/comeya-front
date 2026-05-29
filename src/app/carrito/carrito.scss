@@ -118,6 +118,22 @@
   color: var(--text-muted);
   margin-bottom: 8px;
 
+  .cafe-select {
+    border: 2px solid #eee;
+    border-radius: 10px;
+    padding: 6px 10px;
+    font-size: 13px;
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text-dark);
+    background: white;
+    outline: none;
+    cursor: pointer;
+
+    &:focus {
+      border-color: var(--orange);
+    }
+  }
+
   &.total {
     font-size: 18px;
     font-weight: 700;

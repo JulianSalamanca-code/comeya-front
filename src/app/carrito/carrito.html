@@ -29,15 +29,19 @@
     </div>
 
     <div class="cart-summary">
+      <div class="cart-summary-row">
+        <span>Cafetería</span>
+        <select class="cafe-select" [(ngModel)]="cafeteriaId">
+          @for (c of cafeterias; track c.id) {
+            <option [value]="c.id">{{ c.name }}</option>
+          }
+        </select>
+      </div>
       <div class="cart-summary-row"><span>Subtotal</span><span>{{ formatPrecio(subtotal) }}</span></div>
       <div class="cart-summary-row"><span>Servicio</span><span>{{ formatPrecio(delivery) }}</span></div>
       <div class="cart-summary-row total"><span>Total</span><span>{{ formatPrecio(total) }}</span></div>
       <button class="btn-pedido" (click)="realizarPedido()" [disabled]="cargando()">
-        @if (cargando()) {
-          Creando pedido...
-        } @else {
-          🛒 Realizar Pedido
-        }
+        @if (cargando()) { Creando pedido... } @else { 🛒 Realizar Pedido }
       </button>
     </div>
   }

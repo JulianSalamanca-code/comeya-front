@@ -1,6 +1,8 @@
 import { Component, inject, OnInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ApiService } from '../services/api';
+import { ProductosComponent } from './productos/productos';
+import { CafeteriasComponent } from './cafeterias/cafeterias';
 
 interface Usuario {
   id: number;
@@ -35,7 +37,7 @@ const MAP_ESTADO_REV: Record<string, string> = {
 @Component({
   selector: 'app-admin',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ProductosComponent, CafeteriasComponent],
   templateUrl: './admin.html',
   styleUrl: './admin.scss'
 })
@@ -48,6 +50,8 @@ export class AdminComponent implements OnInit {
 
   pedidos = signal<Pedido[]>([]);
   cargandoPedidos = signal(true);
+
+  tab = signal<'cocina' | 'caja' | 'usuarios' | 'productos' | 'cafeterias'>('cocina');
 
   totalCobradoHoy = computed(() =>
     this.pedidos().filter(p => p.estado === 'COBRADO').reduce((acc, p) => acc + p.total, 0)

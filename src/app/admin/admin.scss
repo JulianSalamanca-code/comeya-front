@@ -39,6 +39,40 @@
   &:hover { background: rgba(200,84,26,0.08); }
 }
 
+.admin-tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 24px;
+  background: var(--cream);
+  border-radius: 14px;
+  padding: 4px;
+  overflow-x: auto;
+}
+
+.admin-tab {
+  border: none;
+  border-radius: 10px;
+  padding: 10px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  background: transparent;
+  color: var(--text-muted);
+  white-space: nowrap;
+  transition: all 0.2s;
+
+  &.active {
+    background: white;
+    color: var(--text-dark);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  }
+
+  &:hover:not(.active) {
+    color: var(--text-dark);
+  }
+}
+
 .admin-grid {
   display: flex;
   flex-direction: column;

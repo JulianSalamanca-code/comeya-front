@@ -1,0 +1,81 @@
+<div class="admin-section__header">
+  <span class="admin-section__icon">🍽️</span>
+  <h2>Productos</h2>
+  <span class="total-dia">{{ productos().length }} registrados</span>
+</div>
+
+@if (!editando()) {
+  <button class="btn-nuevo" (click)="nuevo()">+ Nuevo producto</button>
+}
+
+@if (editando()) {
+  <div class="form-card">
+    <h3>{{ formId ? 'Editar' : 'Nuevo' }} producto</h3>
+    <div class="form-row">
+      <label>Nombre</label>
+      <input type="text" [(ngModel)]="formNombre" placeholder="Nombre del producto" />
+    </div>
+    <div class="form-row">
+      <label>Tipo</label>
+      <select [(ngModel)]="formTipo">
+        <option value="General">General</option>
+        <option value="Bebida">Bebida</option>
+        <option value="Postre">Postre</option>
+        <option value="Desayuno">Desayuno</option>
+        <option value="Almuerzo">Almuerzo</option>
+      </select>
+    </div>
+    <div class="form-row">
+      <label>Precio</label>
+      <input type="number" [(ngModel)]="formPrecio" placeholder="0" min="0" />
+    </div>
+    <div class="form-row">
+      <label>Stock</label>
+      <input type="number" [(ngModel)]="formStock" placeholder="0" min="0" />
+    </div>
+    <div class="form-actions">
+      <button class="btn-guardar" (click)="guardar()">Guardar</button>
+      <button class="btn-cancelar" (click)="cancelar()">Cancelar</button>
+    </div>
+  </div>
+}
+
+@if (cargando()) {
+  <p class="loading-msg">Cargando productos...</p>
+} @else {
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Tipo</th>
+          <th>Precio</th>
+          <th>Stock</th>
+          <th>Estado</th>
+          <th>Acción</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (p of productos(); track p.id) {
+          <tr>
+            <td class="td-nombre">{{ p.name }}</td>
+            <td>{{ p.type }}</td>
+            <td>${{ p.price.toLocaleString('es-CO') }}</td>
+            <td>{{ p.stock }}</td>
+            <td>
+              <span class="badge" [class.badge--activo]="p.active" [class.badge--inactivo]="!p.active">
+                {{ p.active ? 'Activo' : 'Inactivo' }}
+              </span>
+            </td>
+            <td>
+              <button class="btn-edit" (click)="editar(p)">Editar</button>
+              <button class="btn-delete" (click)="eliminar(p)">Eliminar</button>
+            </td>
+          </tr>
+        } @empty {
+          <tr><td colspan="6" class="empty-col">Sin productos registrados</td></tr>
+        }
+      </tbody>
+    </table>
+  </div>
+}

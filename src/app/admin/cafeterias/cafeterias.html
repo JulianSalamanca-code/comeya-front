@@ -1,0 +1,57 @@
+<div class="admin-section__header">
+  <span class="admin-section__icon">🏪</span>
+  <h2>Cafeterías</h2>
+  <span class="total-dia">{{ cafeterias().length }} registradas</span>
+</div>
+
+@if (!editando()) {
+  <button class="btn-nuevo" (click)="nuevo()">+ Nueva cafetería</button>
+}
+
+@if (editando()) {
+  <div class="form-card">
+    <h3>{{ formId ? 'Editar' : 'Nueva' }} cafetería</h3>
+    <div class="form-row">
+      <label>Nombre</label>
+      <input type="text" [(ngModel)]="formNombre" placeholder="Nombre de la cafetería" />
+    </div>
+    <div class="form-actions">
+      <button class="btn-guardar" (click)="guardar()">Guardar</button>
+      <button class="btn-cancelar" (click)="cancelar()">Cancelar</button>
+    </div>
+  </div>
+}
+
+@if (cargando()) {
+  <p class="loading-msg">Cargando cafeterías...</p>
+} @else {
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Estado</th>
+          <th>Acción</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (c of cafeterias(); track c.id) {
+          <tr>
+            <td class="td-nombre">{{ c.name }}</td>
+            <td>
+              <span class="badge" [class.badge--activo]="c.open" [class.badge--inactivo]="!c.open">
+                {{ c.open ? 'Abierta' : 'Cerrada' }}
+              </span>
+            </td>
+            <td>
+              <button class="btn-edit" (click)="editar(c)">Editar</button>
+              <button class="btn-delete" (click)="eliminar(c)">Eliminar</button>
+            </td>
+          </tr>
+        } @empty {
+          <tr><td colspan="3" class="empty-col">Sin cafeterías registradas</td></tr>
+        }
+      </tbody>
+    </table>
+  </div>
+}

@@ -1,0 +1,126 @@
+.btn-nuevo {
+  border: none;
+  border-radius: 10px;
+  padding: 10px 18px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  background: var(--orange);
+  color: white;
+  margin-bottom: 16px;
+  transition: all 0.2s;
+
+  &:hover { background: var(--orange-light); transform: translateY(-1px); }
+}
+
+.form-card {
+  background: var(--cream);
+  border-radius: 14px;
+  padding: 20px;
+  margin-bottom: 20px;
+
+  h3 {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 16px;
+  }
+}
+
+.form-row {
+  margin-bottom: 12px;
+
+  label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+  }
+
+  input, select {
+    width: 100%;
+    padding: 10px 14px;
+    border: 2px solid #eee;
+    border-radius: 10px;
+    font-size: 14px;
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text-dark);
+    background: white;
+    outline: none;
+
+    &:focus {
+      border-color: var(--orange);
+      box-shadow: 0 0 0 3px rgba(200,84,26,0.08);
+    }
+  }
+}
+
+.form-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.btn-guardar {
+  border: none;
+  border-radius: 10px;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  background: var(--orange);
+  color: white;
+  transition: all 0.2s;
+
+  &:hover { background: var(--orange-light); transform: translateY(-1px); }
+}
+
+.btn-cancelar {
+  border: 2px solid #eee;
+  border-radius: 10px;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  background: white;
+  color: var(--text-muted);
+  transition: all 0.2s;
+
+  &:hover { border-color: #ccc; }
+}
+
+.btn-edit {
+  border: none;
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  background: rgba(200,84,26,0.1);
+  color: var(--orange);
+  margin-right: 6px;
+  transition: all 0.2s;
+
+  &:hover { background: rgba(200,84,26,0.2); }
+}
+
+.btn-delete {
+  border: none;
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  background: rgba(200,80,80,0.1);
+  color: #c0392b;
+  transition: all 0.2s;
+
+  &:hover { background: rgba(200,80,80,0.2); }
+}
