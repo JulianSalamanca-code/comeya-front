@@ -46,7 +46,7 @@ export class NotificationService {
   }
 
   getNotifications(): Observable<NotificationItem[]> {
-    const token = localStorage.getItem('token');
+    const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
     if (!token) return of([]);
 
     return this.http.get<{ data: NotificationResponse[] }>(`${this.base}/notifications/me`).pipe(

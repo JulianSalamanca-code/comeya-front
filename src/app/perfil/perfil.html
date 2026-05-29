@@ -3,8 +3,11 @@
     <div class="profile-avatar-wrap">
       <div class="profile-avatar">👤</div>
     </div>
-    <div class="profile-name">{{ perfil.fullName || perfil.nombre || 'Usuario' }}</div>
-    <div class="profile-email">{{ perfil.email || 'correo@universidad.edu' }}</div>
+    <div class="profile-name">{{ perfil.name || perfil.nombre || 'Usuario' }}</div>
+    <div class="profile-email">{{ perfil.email || '' }}</div>
+    @if (rol) {
+      <div class="profile-rol">{{ rol }}</div>
+    }
   </div>
 </div>
 
@@ -14,19 +17,9 @@
     <span class="pm-label">Mis pedidos</span>
     <span class="pm-arrow">›</span>
   </div>
-  <div class="profile-menu-item">
-    <div class="pm-icon">💳</div>
-    <span class="pm-label">Métodos de pago</span>
-    <span class="pm-arrow">›</span>
-  </div>
-  <div class="profile-menu-item">
-    <div class="pm-icon">🔔</div>
-    <span class="pm-label">Notificaciones</span>
-    <span class="pm-arrow">›</span>
-  </div>
-  <div class="profile-menu-item">
-    <div class="pm-icon">⚙️</div>
-    <span class="pm-label">Configuración</span>
+  <div class="profile-menu-item" routerLink="/forgot-password">
+    <div class="pm-icon">🔑</div>
+    <span class="pm-label">Cambiar contraseña</span>
     <span class="pm-arrow">›</span>
   </div>
 

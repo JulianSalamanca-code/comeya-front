@@ -128,6 +128,34 @@
   }
 }
 
+.form-error {
+  color: #c0392b;
+  font-size: 13px;
+  margin-bottom: 16px;
+  padding: 10px 14px;
+  background: #fdecea;
+  border-radius: 10px;
+  border-left: 3px solid #c0392b;
+}
+
+.cart-item-img-placeholder {
+  width: 60px;
+  height: 60px;
+  border-radius: 12px;
+  background: var(--cream);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  flex-shrink: 0;
+
+  @media (min-width: 768px) {
+    width: 72px;
+    height: 72px;
+    font-size: 32px;
+  }
+}
+
 .btn-pedido {
   background: var(--orange);
   border: none;

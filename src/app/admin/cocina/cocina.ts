@@ -6,9 +6,22 @@ interface Pedido {
   id: number;
   usuario: string;
   items: string[];
-  estado: 'PENDIENTE' | 'EN_PREPARACION' | 'LISTO';
+  estado: string;
   hora: string;
 }
+
+const MAP_ESTADO: Record<string, string> = {
+  'PENDING': 'PENDIENTE',
+  'IN_PROGRESS': 'EN_PREPARACION',
+  'COMPLETED': 'LISTO',
+  'CANCELLED': 'CANCELADO'
+};
+
+const MAP_ESTADO_REV: Record<string, string> = {
+  'PENDIENTE': 'PENDING',
+  'EN_PREPARACION': 'IN_PROGRESS',
+  'LISTO': 'COMPLETED'
+};
 
 @Component({
   selector: 'app-cocina',
@@ -32,37 +45,36 @@ export class CocinaComponent implements OnInit {
 
     this.api.getPedidos().subscribe({
       next: (data: any) => {
-        this.pedidos.set(data);
+        this.pedidos.set((data || []).map((p: any) => ({
+          id: p.id,
+          usuario: p.client || p.customerName || 'Desconocido',
+          items: p.items?.map((i: any) => i.productName || 'Producto') || [],
+          estado: MAP_ESTADO[p.status] || p.status,
+          hora: p.createdAt ? new Date(p.createdAt).toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' }) : ''
+        })));
         this.cargando.set(false);
       },
       error: () => {
-        // Datos de prueba mientras el backend responde
-        this.pedidos.set([
-          { id: 1, usuario: 'juan123',  items: ['Bandeja paisa', 'Jugo de lulo'], estado: 'PENDIENTE',      hora: '12:03' },
-          { id: 2, usuario: 'maria99',  items: ['Ajiaco', 'Café tinto'],          estado: 'EN_PREPARACION', hora: '12:07' },
-          { id: 3, usuario: 'carlos_r', items: ['Arepa con queso', 'Changua'],    estado: 'LISTO',          hora: '12:10' },
-          { id: 4, usuario: 'ana_t',    items: ['Empanada de pipián'],             estado: 'PENDIENTE',      hora: '12:15' },
-        ]);
         this.cargando.set(false);
       }
     });
   }
 
   avanzarEstado(pedido: Pedido) {
-    const siguiente: Record<string, 'EN_PREPARACION' | 'LISTO'> = {
-      'PENDIENTE':      'EN_PREPARACION',
+    const siguiente: Record<string, string> = {
+      'PENDIENTE': 'EN_PREPARACION',
       'EN_PREPARACION': 'LISTO'
     };
     if (!siguiente[pedido.estado]) return;
 
     const nuevoEstado = siguiente[pedido.estado];
-    this.api.actualizarEstadoPedido(pedido.id, nuevoEstado).subscribe({
+    this.api.actualizarEstadoPedido(pedido.id, MAP_ESTADO_REV[nuevoEstado]).subscribe({
       next: () => this.actualizarLocal(pedido.id, nuevoEstado),
-      error: () => this.actualizarLocal(pedido.id, nuevoEstado) // actualiza local igual
+      error: () => this.actualizarLocal(pedido.id, nuevoEstado)
     });
   }
 
-  private actualizarLocal(id: number, estado: 'EN_PREPARACION' | 'LISTO') {
+  private actualizarLocal(id: number, estado: string) {
     this.pedidos.update(list =>
       list.map(p => p.id === id ? { ...p, estado } : p)
     );

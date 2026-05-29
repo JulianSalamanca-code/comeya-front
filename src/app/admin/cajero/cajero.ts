@@ -7,9 +7,16 @@ interface Pedido {
   usuario: string;
   items: string[];
   total: number;
-  estado: 'LISTO' | 'COBRADO';
+  estado: string;
   hora: string;
 }
+
+const MAP_ESTADO: Record<string, string> = {
+  'PENDING': 'PENDIENTE',
+  'IN_PROGRESS': 'EN_PREPARACION',
+  'COMPLETED': 'LISTO',
+  'CANCELLED': 'CANCELADO'
+};
 
 @Component({
   selector: 'app-cajero',
@@ -39,23 +46,24 @@ export class CajeroComponent implements OnInit {
 
     this.api.getPedidos().subscribe({
       next: (data: any) => {
-        this.pedidos.set(data);
+        this.pedidos.set((data || []).map((p: any) => ({
+          id: p.id,
+          usuario: p.client || p.customerName || 'Desconocido',
+          items: p.items?.map((i: any) => i.productName || 'Producto') || [],
+          total: p.total || 0,
+          estado: MAP_ESTADO[p.status] || p.status || 'PENDIENTE',
+          hora: p.createdAt ? new Date(p.createdAt).toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' }) : ''
+        })));
         this.cargando.set(false);
       },
       error: () => {
-        this.pedidos.set([
-          { id: 3, usuario: 'carlos_r', items: ['Arepa con queso', 'Changua'],    total: 7700,  estado: 'LISTO',   hora: '12:10' },
-          { id: 5, usuario: 'pedro_g',  items: ['Bandeja paisa', 'Jugo de lulo'], total: 15300, estado: 'LISTO',   hora: '12:18' },
-          { id: 6, usuario: 'laura_m',  items: ['Café tinto', 'Pandebono'],       total: 3300,  estado: 'COBRADO', hora: '12:05' },
-          { id: 7, usuario: 'sofia_v',  items: ['Empanada de pipián'],             total: 2200,  estado: 'COBRADO', hora: '11:58' },
-        ]);
         this.cargando.set(false);
       }
     });
   }
 
   cobrar(pedido: Pedido) {
-    this.api.actualizarEstadoPedido(pedido.id, 'COBRADO').subscribe({
+    this.api.actualizarEstadoPedido(pedido.id, 'COMPLETED').subscribe({
       next: () => this.marcarCobrado(pedido.id),
       error: () => this.marcarCobrado(pedido.id)
     });

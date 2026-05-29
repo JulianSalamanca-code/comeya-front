@@ -19,6 +19,19 @@ interface Pedido {
   hora: string;
 }
 
+const MAP_ESTADO: Record<string, string> = {
+  'PENDING': 'PENDIENTE',
+  'IN_PROGRESS': 'EN_PREPARACION',
+  'COMPLETED': 'LISTO',
+  'CANCELLED': 'CANCELADO'
+};
+
+const MAP_ESTADO_REV: Record<string, string> = {
+  'PENDIENTE': 'PENDING',
+  'EN_PREPARACION': 'IN_PROGRESS',
+  'LISTO': 'COMPLETED'
+};
+
 @Component({
   selector: 'app-admin',
   standalone: true,
@@ -30,15 +43,12 @@ export class AdminComponent implements OnInit {
   private api = inject(ApiService);
   private isBrowser = typeof window !== 'undefined';
 
-  // Users
   usuarios = signal<Usuario[]>([]);
   cargandoUsers = signal(true);
 
-  // Cocina
   pedidos = signal<Pedido[]>([]);
   cargandoPedidos = signal(true);
 
-  // Cajero
   totalCobradoHoy = computed(() =>
     this.pedidos().filter(p => p.estado === 'COBRADO').reduce((acc, p) => acc + p.total, 0)
   );
@@ -53,50 +63,55 @@ export class AdminComponent implements OnInit {
     if (!this.isBrowser) return;
 
     this.api.getUsers().subscribe({
-      next: (data: any) => { this.usuarios.set(data); this.cargandoUsers.set(false); },
+      next: (data: any) => {
+        const list = data?.content || data || [];
+        this.usuarios.set(list.map((u: any) => ({
+          id: u.id,
+          fullName: u.name || u.fullName,
+          email: u.email,
+          role: u.role,
+          active: u.active
+        })));
+        this.cargandoUsers.set(false);
+      },
       error: () => {
-        this.usuarios.set([
-          { id: 1, fullName: 'Juan Díaz', email: 'juan.diaz@uni.edu.co', role: 'USER', active: true },
-          { id: 2, fullName: 'María López', email: 'maria.lopez@uni.edu.co', role: 'USER', active: true },
-          { id: 3, fullName: 'Carlos Ruiz', email: 'carlos.ruiz@uni.edu.co', role: 'ADMIN', active: false },
-          { id: 4, fullName: 'Ana Torres', email: 'ana.torres@uni.edu.co', role: 'USER', active: true },
-        ]);
         this.cargandoUsers.set(false);
       }
     });
 
     this.api.getPedidos().subscribe({
-      next: (data: any) => { this.pedidos.set(data); this.cargandoPedidos.set(false); },
+      next: (data: any) => {
+        this.pedidos.set((data || []).map((p: any) => ({
+          id: p.id,
+          usuario: p.client || p.customerName || 'Desconocido',
+          items: p.items?.map((i: any) => i.productName || 'Producto') || [],
+          total: p.total || 0,
+          estado: MAP_ESTADO[p.status] || p.status || 'PENDIENTE',
+          hora: p.createdAt ? new Date(p.createdAt).toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' }) : ''
+        })));
+        this.cargandoPedidos.set(false);
+      },
       error: () => {
-        this.pedidos.set([
-          { id: 1, usuario: 'juan123',  items: ['Bandeja paisa', 'Jugo de lulo'], total: 12500, estado: 'PENDIENTE',      hora: '12:03' },
-          { id: 2, usuario: 'maria99',  items: ['Ajiaco', 'Café tinto'],          total: 11300, estado: 'EN_PREPARACION', hora: '12:07' },
-          { id: 3, usuario: 'carlos_r', items: ['Arepa con queso', 'Changua'],    total: 7700,  estado: 'LISTO',          hora: '12:10' },
-          { id: 4, usuario: 'ana_t',    items: ['Empanada de pipián'],             total: 2200,  estado: 'PENDIENTE',      hora: '12:15' },
-          { id: 6, usuario: 'laura_m',  items: ['Café tinto', 'Pandebono'],       total: 3300,  estado: 'COBRADO',        hora: '12:05' },
-          { id: 7, usuario: 'sofia_v',  items: ['Empanada de pipián'],             total: 2200,  estado: 'COBRADO',        hora: '11:58' },
-        ]);
         this.cargandoPedidos.set(false);
       }
     });
   }
 
-  // ── Cocina actions ──
   avanzarEstado(pedido: Pedido) {
     const siguiente: Record<string, string> = {
       'PENDIENTE': 'EN_PREPARACION',
       'EN_PREPARACION': 'LISTO'
     };
     if (!siguiente[pedido.estado]) return;
-    this.api.actualizarEstadoPedido(pedido.id, siguiente[pedido.estado]).subscribe({
-      next: () => this.actualizarPedidoLocal(pedido.id, siguiente[pedido.estado]),
-      error: () => this.actualizarPedidoLocal(pedido.id, siguiente[pedido.estado])
+    const nuevoEstado = siguiente[pedido.estado];
+    this.api.actualizarEstadoPedido(pedido.id, MAP_ESTADO_REV[nuevoEstado]).subscribe({
+      next: () => this.actualizarPedidoLocal(pedido.id, nuevoEstado),
+      error: () => this.actualizarPedidoLocal(pedido.id, nuevoEstado)
     });
   }
 
-  // ── Cajero actions ──
   cobrar(pedido: Pedido) {
-    this.api.actualizarEstadoPedido(pedido.id, 'COBRADO').subscribe({
+    this.api.actualizarEstadoPedido(pedido.id, 'COMPLETED').subscribe({
       next: () => this.actualizarPedidoLocal(pedido.id, 'COBRADO'),
       error: () => this.actualizarPedidoLocal(pedido.id, 'COBRADO')
     });
@@ -106,7 +121,6 @@ export class AdminComponent implements OnInit {
     this.pedidos.update(list => list.map(p => p.id === id ? { ...p, estado } : p));
   }
 
-  // ── User actions ──
   toggleEstado(usuario: Usuario) {
     this.usuarios.update(list =>
       list.map(u => u.id === usuario.id ? { ...u, active: !u.active } : u)

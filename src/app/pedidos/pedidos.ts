@@ -1,14 +1,13 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ApiService } from '../services/api';
 
-interface Pedido {
-  id: string;
-  mesa: string;
-  estado: string;
-  hora: string;
-  items: string[];
-  total: number;
-}
+const MAP_ESTADO: Record<string, string> = {
+  'PENDING': 'NUEVO',
+  'IN_PROGRESS': 'PREPARANDO',
+  'COMPLETED': 'LISTO',
+  'CANCELLED': 'CANCELADO'
+};
 
 @Component({
   selector: 'app-pedidos',
@@ -17,25 +16,50 @@ interface Pedido {
   templateUrl: './pedidos.html',
   styleUrl: './pedidos.scss'
 })
-export class PedidosComponent {
-  pedidos: Pedido[] = [
-    { id: '#1024', mesa: 'Mesa 5', estado: 'PREPARANDO', hora: '12:43 PM', items: ['1x Ensalada César', '1x Jugo Natural', '1x Café Americano'], total: 9500 },
-    { id: '#1020', mesa: 'Para llevar', estado: 'ENTREGADO', hora: '11:15 AM', items: ['2x Hamburguesa Clásica', '2x Coca Cola'], total: 23000 },
-  ];
+export class PedidosComponent implements OnInit {
+  private api = inject(ApiService);
+  private isBrowser = typeof window !== 'undefined';
+
+  pedidos = signal<any[]>([]);
+  cargando = signal(true);
 
   statusLabel: Record<string, string> = {
     NUEVO: 'Nuevo',
     PREPARANDO: 'En preparación',
     LISTO: 'Listo',
-    ENTREGADO: 'Entregado',
+    CANCELADO: 'Cancelado',
   };
 
   statusClass: Record<string, string> = {
     NUEVO: 'status-nuevo',
     PREPARANDO: 'status-preparando',
     LISTO: 'status-listo',
-    ENTREGADO: 'status-entregado',
+    CANCELADO: 'status-cancelado',
   };
+
+  ngOnInit() {
+    if (!this.isBrowser) {
+      this.cargando.set(false);
+      return;
+    }
+
+    this.api.getOrders().subscribe({
+      next: (data: any) => {
+        this.pedidos.set((data || []).map((p: any) => ({
+          id: `#${p.id}`,
+          mesa: p.cafeteria?.name || 'Para llevar',
+          estado: MAP_ESTADO[p.status] || p.status || 'NUEVO',
+          hora: p.createdAt ? new Date(p.createdAt).toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' }) : '',
+          items: p.items?.map((i: any) => `${i.quantity}x ${i.productName || 'Producto'}`) || [],
+          total: p.total || 0
+        })));
+        this.cargando.set(false);
+      },
+      error: () => {
+        this.cargando.set(false);
+      }
+    });
+  }
 
   formatPrecio(p: number): string {
     return '$' + p.toLocaleString('es-CO');

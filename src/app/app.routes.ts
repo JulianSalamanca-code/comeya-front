@@ -10,6 +10,9 @@ export const routes: Routes = [
   { path: 'register',
     loadComponent: () => import('./register/register').then(m => m.RegisterComponent) },
 
+  { path: 'forgot-password',
+    loadComponent: () => import('./forgot-password/forgot-password').then(m => m.ForgotPasswordComponent) },
+
   {
     path: '',
     loadComponent: () => import('./shell/shell').then(m => m.ShellComponent),
@@ -17,6 +20,8 @@ export const routes: Routes = [
     children: [
       { path: 'home',
         loadComponent: () => import('./home/home').then(m => m.HomeComponent) },
+      { path: 'dashboard',
+        loadComponent: () => import('./dashboard/dashboard').then(m => m.DashboardComponent) },
       { path: 'menu',
         loadComponent: () => import('./menu/menu').then(m => m.MenuComponent) },
       { path: 'carrito',

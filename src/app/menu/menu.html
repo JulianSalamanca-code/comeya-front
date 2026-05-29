@@ -1,29 +1,37 @@
 <div class="section app-container">
   <h2 class="section-title">Menú del Día</h2>
 
-  <div class="chip-row">
-    @for (cat of categorias; track cat) {
-      <button class="chip" [class.active]="categoriaActiva() === cat" (click)="setCategoria(cat)">
-        {{ cat }}
-      </button>
-    }
-  </div>
+  @if (cargando()) {
+    <div class="loading">Cargando menú...</div>
+  } @else {
+    <div class="chip-row">
+      @for (cat of categorias(); track cat) {
+        <button class="chip" [class.active]="categoriaActiva() === cat" (click)="setCategoria(cat)">
+          {{ cat }}
+        </button>
+      }
+    </div>
 
-  <div class="menu-grid">
-    @for (plato of platosFiltrados; track plato.id) {
-      <div class="menu-card">
-        <img [src]="plato.img" [alt]="plato.nombre" loading="lazy">
-        <div class="menu-card-body">
-          <div class="menu-card-name">{{ plato.nombre }}</div>
-          <div class="menu-card-desc">{{ plato.desc }}</div>
-          <div class="menu-card-footer">
-            <span class="menu-card-price">{{ formatPrecio(plato.precio) }}</span>
-            <button class="btn-add">+</button>
+    <div class="menu-grid">
+      @for (producto of productosFiltrados(); track producto.id) {
+        <div class="menu-card">
+          <div class="menu-card-img">
+            <div class="menu-card-img-placeholder">🍽️</div>
+          </div>
+          <div class="menu-card-body">
+            <div class="menu-card-name">{{ producto.name }}</div>
+            @if (producto.description) {
+              <div class="menu-card-desc">{{ producto.description }}</div>
+            }
+            <div class="menu-card-footer">
+              <span class="menu-card-price">{{ formatPrecio(producto.price) }}</span>
+              <button class="btn-add" (click)="addToCart(producto)">+</button>
+            </div>
           </div>
         </div>
-      </div>
-    }
-  </div>
+      }
+    </div>
+  }
 </div>
 
 <div class="page-spacer"></div>

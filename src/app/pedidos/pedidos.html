@@ -2,7 +2,7 @@
   <h2 class="section-title">Mis Pedidos</h2>
 
   <div class="orders-grid">
-  @for (o of pedidos; track o.id) {
+  @for (o of pedidos(); track o.id) {
     <div class="order-card">
       <div class="order-header">
         <div>

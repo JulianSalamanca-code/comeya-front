@@ -1,5 +1,7 @@
-import { Component, signal, effect } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
+import { ApiService } from '../services/api';
 
 interface CartItem {
   id: number;
@@ -17,7 +19,12 @@ interface CartItem {
   styleUrl: './carrito.scss'
 })
 export class CartComponent {
+  private api = inject(ApiService);
+  private router = inject(Router);
+
   cart = signal<CartItem[]>(this.loadCart());
+  cargando = signal(false);
+  error = signal('');
 
   private loadCart(): CartItem[] {
     if (typeof window === 'undefined') return [];
@@ -66,10 +73,59 @@ export class CartComponent {
   }
 
   realizarPedido() {
-    // TODO: integrar con API
-    const totalItems = this.totalItems;
-    this.cart.set([]);
-    this.save();
-    alert('✅ Pedido enviado a cocina (' + totalItems + ' productos)');
+    const items = this.cart();
+    if (items.length === 0) return;
+
+    this.cargando.set(true);
+    this.error.set('');
+
+    this.api.getCafeterias().subscribe({
+      next: (cafeterias: any) => {
+        const cafeteriaId = Array.isArray(cafeterias) && cafeterias.length > 0 ? cafeterias[0].id : 1;
+
+        const order = {
+          cafeteriaId,
+          items: items.map(i => ({
+            productId: i.id,
+            quantity: i.qty
+          }))
+        };
+
+        this.api.crearOrder(order).subscribe({
+          next: () => {
+            this.cargando.set(false);
+            this.cart.set([]);
+            this.save();
+            this.router.navigate(['/pedidos']);
+          },
+          error: () => {
+            this.cargando.set(false);
+            this.error.set('Error al crear el pedido. Intenta de nuevo.');
+          }
+        });
+      },
+      error: () => {
+        const order = {
+          cafeteriaId: 1,
+          items: items.map(i => ({
+            productId: i.id,
+            quantity: i.qty
+          }))
+        };
+
+        this.api.crearOrder(order).subscribe({
+          next: () => {
+            this.cargando.set(false);
+            this.cart.set([]);
+            this.save();
+            this.router.navigate(['/pedidos']);
+          },
+          error: () => {
+            this.cargando.set(false);
+            this.error.set('Error al crear el pedido. Intenta de nuevo.');
+          }
+        });
+      }
+    });
   }
 }
